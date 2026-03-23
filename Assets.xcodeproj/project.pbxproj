@@ -3,12 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0E35297958474A923F2F9CC4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575720758332D9F25B9F4EE6 /* Constants.swift */; };
-		1090E9A92F50C00900A1A6BF /* Assets.icon in Resources */ = {isa = PBXBuildFile; fileRef = 1090E9A82F50C00900A1A6BF /* Assets.icon */; };
 		16662C20E469CDAD30F83BA3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D436FB58D2A43390024735 /* SettingsView.swift */; };
 		31DD261C8D8E17BE0E2E35B4 /* AssetCatalogKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		352A904267FD3396E9625611 /* CoreUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 64E44E4EE77C280465BE778E /* CoreUI.h */; };
@@ -20,15 +19,19 @@
 		66D46F9CBE52EEFE99B7D6C0 /* AssetCatalogKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */; };
 		73EBE6E3F42D2804254A4CC7 /* AssetCatalogKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 06667121EB78C4EB1D11CE0D /* AssetCatalogKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7DE6C4DD48CCDC68E801894C /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA9155EF010BCA8DA625313 /* PreviewViewController.swift */; };
+		7FA76933002D882EAE7FE6BD /* CoreAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF220D6841FD0B5195DF19 /* CoreAnimationView.swift */; };
 		841BCEDB9440F9938F6253B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1BAA3AB2915292840F5E6BE /* Assets.xcassets */; };
 		8DD85B2356D9FA6406579805 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FDD6B1CA6173BC5FE8D2DA /* Asset.swift */; };
 		9E8408087E02A4F964DE11BC /* AssetGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F497C918A46137F194981D /* AssetGridView.swift */; };
 		A2A96A1553E74C36CCE380C5 /* AssetCatalogEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = B718EBADF036851E6FAB9104 /* AssetCatalogEditor.m */; };
+		A3D48685DCDCA558EF58B5A0 /* CoreAnimationDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C73E1F5EDAD65ECF0749B6E /* CoreAnimationDocument.swift */; };
 		AF08401DDABAEF520DC9F7B0 /* AssetCatalogReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 258F4EDC4EF50DA1490AA4E6 /* AssetCatalogReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3B933FC98B153A3FA485709 /* AssetCatalogKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B4E6E27C8B085150FCDDA3B6 /* AssetEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D7FD201EDB5A6E5380D424 /* AssetEditView.swift */; };
 		C33A24E488F30685DA3F47F7 /* AssetsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB5152EC1EA7EC22CACECD2 /* AssetsApp.swift */; };
+		C9B09EF5CE7F7CA1FC8D0F12 /* CAMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5566A7538F0DF0BB0A95A5 /* CAMLView.swift */; };
 		CF8E16A9C579AB78755B7DE9 /* CatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8740892A5E0762B21DC3D62B /* CatalogViewModel.swift */; };
+		D1705612FA897BFDB1D47CF7 /* CAMLContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162F845FC6A424A2C5423EBC /* CAMLContainerView.swift */; };
 		F8C70C4B8836F91B7D95583C /* ImageExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E19E47B5EDF4D620F1646C2 /* ImageExporter.swift */; };
 		F971C3F97E6CA2FDD12DFBCB /* AssetCatalogKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */; };
 		FA2A44299592BAB1EB135E5A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1AB737A4918A369BADC06E /* ContentView.swift */; };
@@ -79,12 +82,13 @@
 /* Begin PBXFileReference section */
 		06667121EB78C4EB1D11CE0D /* AssetCatalogKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetCatalogKit.h; sourceTree = "<group>"; };
 		08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AssetCatalogKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1090E9A82F50C00900A1A6BF /* Assets.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Assets.icon; sourceTree = "<group>"; };
 		152DBB1F7B595C52D0184926 /* Assets-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Assets-Bridging-Header.h"; sourceTree = "<group>"; };
+		162F845FC6A424A2C5423EBC /* CAMLContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAMLContainerView.swift; sourceTree = "<group>"; };
 		22F497C918A46137F194981D /* AssetGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetGridView.swift; sourceTree = "<group>"; };
 		258F4EDC4EF50DA1490AA4E6 /* AssetCatalogReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetCatalogReader.h; sourceTree = "<group>"; };
 		2E1885F02B763D9D0C485E37 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3A83ADCA08E26DDAFCB69A8F /* AssetCatalogReader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AssetCatalogReader.m; sourceTree = "<group>"; };
+		3C73E1F5EDAD65ECF0749B6E /* CoreAnimationDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAnimationDocument.swift; sourceTree = "<group>"; };
 		3E7B24B57AEDBAC28B62FB9B /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		4DA75376C35898D60EB592F7 /* Assets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Assets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		575720758332D9F25B9F4EE6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -94,13 +98,16 @@
 		8AA9155EF010BCA8DA625313 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		8BB4A58683FF79886D1F046B /* AssetPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetPreviewView.swift; sourceTree = "<group>"; };
 		8E19E47B5EDF4D620F1646C2 /* ImageExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExporter.swift; sourceTree = "<group>"; };
+		99CF220D6841FD0B5195DF19 /* CoreAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAnimationView.swift; sourceTree = "<group>"; };
 		9B85F74C2ECC62D3CE27D961 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9C1AB737A4918A369BADC06E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A3D7FD201EDB5A6E5380D424 /* AssetEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetEditView.swift; sourceTree = "<group>"; };
+		AB094A361F173B427CF86880 /* QuartzCorePrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QuartzCorePrivate.h; sourceTree = "<group>"; };
 		B718EBADF036851E6FAB9104 /* AssetCatalogEditor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AssetCatalogEditor.m; sourceTree = "<group>"; };
 		C8FDD6B1CA6173BC5FE8D2DA /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		C9D436FB58D2A43390024735 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		CAEF04146BCD9A516D49ED07 /* AssetCatalogEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetCatalogEditor.h; sourceTree = "<group>"; };
+		CE5566A7538F0DF0BB0A95A5 /* CAMLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAMLView.swift; sourceTree = "<group>"; };
 		DBB5152EC1EA7EC22CACECD2 /* AssetsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsApp.swift; sourceTree = "<group>"; };
 		E1BAA3AB2915292840F5E6BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FC25194964D3439CE80C87C8 /* AssetCatalogQuickLook.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AssetCatalogQuickLook.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -134,18 +141,13 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		12CC9F21934B9D75FDF7A131 /* Components */ = {
+		1918845A0F5AE803A91706F6 /* CoreAnimation */ = {
 			isa = PBXGroup;
 			children = (
+				FEF72A1CE606F2F490379ED5 /* Models */,
+				46A4E7499045DFF92BCB85BA /* Views */,
 			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		14DF0433C26A643656FC1AD1 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
+			path = CoreAnimation;
 			sourceTree = "<group>";
 		};
 		1AB06EA3D23166E7CA8D3199 /* Products */ = {
@@ -162,10 +164,26 @@
 			isa = PBXGroup;
 			children = (
 				575720758332D9F25B9F4EE6 /* Constants.swift */,
-				12CC9F21934B9D75FDF7A131 /* Components */,
-				14DF0433C26A643656FC1AD1 /* Extensions */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		46A4E7499045DFF92BCB85BA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				162F845FC6A424A2C5423EBC /* CAMLContainerView.swift */,
+				CE5566A7538F0DF0BB0A95A5 /* CAMLView.swift */,
+				99CF220D6841FD0B5195DF19 /* CoreAnimationView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		475D34C91909EE0583A8F7BC /* Private Headers */ = {
+			isa = PBXGroup;
+			children = (
+				AB094A361F173B427CF86880 /* QuartzCorePrivate.h */,
+			);
+			path = "Private Headers";
 			sourceTree = "<group>";
 		};
 		4B91F04EE95AD0C03D7AB4E8 /* Resources */ = {
@@ -217,7 +235,6 @@
 		82B9813BBACCB03E10A6107E = {
 			isa = PBXGroup;
 			children = (
-				1090E9A82F50C00900A1A6BF /* Assets.icon */,
 				AE449405875DEAFC686C997A /* AssetCatalogKit */,
 				B08058FE7CA96838F181A6A9 /* AssetCatalogQuickLook */,
 				9B29B0226E4EFFE1FA49DDC5 /* Assets */,
@@ -265,6 +282,7 @@
 				2E1885F02B763D9D0C485E37 /* Info.plist */,
 				5664EB9EE01141BB37800946 /* App */,
 				EAE728274C85BA73004AE482 /* Features */,
+				475D34C91909EE0583A8F7BC /* Private Headers */,
 				4B91F04EE95AD0C03D7AB4E8 /* Resources */,
 				1D2E43DB53221553005A3FC3 /* Shared */,
 			);
@@ -292,9 +310,18 @@
 			isa = PBXGroup;
 			children = (
 				968613DA2815DF6F1E4B9662 /* Catalog */,
+				1918845A0F5AE803A91706F6 /* CoreAnimation */,
 				09BC563CCCFC1108A4EA42E2 /* Settings */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		FEF72A1CE606F2F490379ED5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3C73E1F5EDAD65ECF0749B6E /* CoreAnimationDocument.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -384,18 +411,20 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					001649A8A7A6CF1ABE3CA8DE = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					1C76F838BC4C1D909932D10C = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					4F7223D3BF971271E80897B3 = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 8E3C05EB40A9A994C7EB661C /* Build configuration list for PBXProject "Assets" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -404,6 +433,8 @@
 			);
 			mainGroup = 82B9813BBACCB03E10A6107E;
 			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 1AB06EA3D23166E7CA8D3199 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -420,7 +451,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				841BCEDB9440F9938F6253B0 /* Assets.xcassets in Resources */,
-				1090E9A92F50C00900A1A6BF /* Assets.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,9 +484,13 @@
 				9E8408087E02A4F964DE11BC /* AssetGridView.swift in Sources */,
 				5F02961B6779CBC4DDA8CF16 /* AssetPreviewView.swift in Sources */,
 				C33A24E488F30685DA3F47F7 /* AssetsApp.swift in Sources */,
+				D1705612FA897BFDB1D47CF7 /* CAMLContainerView.swift in Sources */,
+				C9B09EF5CE7F7CA1FC8D0F12 /* CAMLView.swift in Sources */,
 				CF8E16A9C579AB78755B7DE9 /* CatalogViewModel.swift in Sources */,
 				0E35297958474A923F2F9CC4 /* Constants.swift in Sources */,
 				FA2A44299592BAB1EB135E5A /* ContentView.swift in Sources */,
+				A3D48685DCDCA558EF58B5A0 /* CoreAnimationDocument.swift in Sources */,
+				7FA76933002D882EAE7FE6BD /* CoreAnimationView.swift in Sources */,
 				16662C20E469CDAD30F83BA3 /* SettingsView.swift in Sources */,
 				4C2AA2F58A0A1D04C9E78D39 /* SidebarView.swift in Sources */,
 			);
@@ -482,20 +516,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 7M9N6Y737U;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = /System/Library/PrivateFrameworks;
+				FRAMEWORK_SEARCH_PATHS = (
+					/System/Library/PrivateFrameworks,
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/AssetCatalogKit/Private",
-					Headers,
+					"$(SRCROOT)/AssetCatalogKit/Private Headers",
 				);
 				INFOPLIST_FILE = AssetCatalogKit/Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
@@ -523,10 +556,8 @@
 		579C022CA2CF093E976EC96B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7M9N6Y737U;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AssetCatalogQuickLook/Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
@@ -545,10 +576,8 @@
 		745C6D46CA6CE9B6AC9DB498 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7M9N6Y737U;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AssetCatalogQuickLook/Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
@@ -633,15 +662,15 @@
 		9906A22FB8B91D5FA36D15A6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = Assets;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Assets/Assets.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7M9N6Y737U;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Assets/Private Headers",
+				);
 				INFOPLIST_FILE = Assets/Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
 				INFOPLIST_KEY_CFBundleDisplayName = Assets;
@@ -661,15 +690,15 @@
 		A163E78135D60BD94AF543C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = Assets;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Assets/Assets.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7M9N6Y737U;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Assets/Private Headers",
+				);
 				INFOPLIST_FILE = Assets/Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;
 				INFOPLIST_KEY_CFBundleDisplayName = Assets;
@@ -690,20 +719,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 7M9N6Y737U;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = /System/Library/PrivateFrameworks;
+				FRAMEWORK_SEARCH_PATHS = (
+					/System/Library/PrivateFrameworks,
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/AssetCatalogKit/Private",
-					Headers,
+					"$(SRCROOT)/AssetCatalogKit/Private Headers",
 				);
 				INFOPLIST_FILE = AssetCatalogKit/Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedFile;

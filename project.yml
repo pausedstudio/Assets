@@ -33,6 +33,8 @@ targets:
         INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.developer-tools"
         INFOPLIST_KEY_NSHumanReadableCopyright: ""
         SWIFT_OBJC_BRIDGING_HEADER: Assets/Assets-Bridging-Header.h
+        HEADER_SEARCH_PATHS:
+          - "$(SRCROOT)/Assets/Private Headers"
         ENABLE_HARDENED_RUNTIME: YES
     dependencies:
       - target: AssetCatalogKit
@@ -57,6 +59,16 @@ targets:
             LSHandlerRank: Alternate
             LSItemContentTypes:
               - com.apple.application-bundle
+          - CFBundleTypeName: Core Animation Archive
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Default
+            LSItemContentTypes:
+              - com.apple.coreanimation-archive
+          - CFBundleTypeName: Core Animation Bundle
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Default
+            LSItemContentTypes:
+              - com.apple.coreanimation-bundle
         UTImportedTypeDeclarations:
           - UTTypeConformsTo:
               - public.data
@@ -65,6 +77,21 @@ targets:
             UTTypeTagSpecification:
               public.filename-extension:
                 - car
+          - UTTypeConformsTo:
+              - public.data
+            UTTypeDescription: Core Animation Archive
+            UTTypeIdentifier: com.apple.coreanimation-archive
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - caar
+                - caml
+          - UTTypeConformsTo:
+              - com.apple.package
+            UTTypeDescription: Core Animation Bundle
+            UTTypeIdentifier: com.apple.coreanimation-bundle
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - ca
     entitlements:
       path: Assets/Assets.entitlements
       properties:
