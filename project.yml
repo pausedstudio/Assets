@@ -14,6 +14,20 @@ settings:
     DEVELOPMENT_TEAM: ""
     SWIFT_STRICT_CONCURRENCY: minimal
 
+packages:
+  Loupe:
+    url: https://github.com/Aeastr/Loupe
+    from: 1.0.0
+  Garnish:
+    url: https://github.com/Aeastr/Garnish
+    from: 1.0.0
+  Chronicle:
+    url: https://github.com/Aeastr/Chronicle
+    from: 1.0.0
+  Conditionals:
+    url: https://github.com/Aeastr/Conditionals
+    from: 1.0.0
+
 targets:
   Assets:
     type: application
@@ -39,6 +53,10 @@ targets:
     dependencies:
       - target: AssetCatalogKit
         embed: true
+      - package: Loupe
+      - package: Garnish
+      - package: Chronicle
+      - package: Conditionals
     info:
       path: Assets/Info.plist
       properties:

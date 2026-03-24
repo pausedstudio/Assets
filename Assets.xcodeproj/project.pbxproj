@@ -10,6 +10,7 @@
 		0E35297958474A923F2F9CC4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575720758332D9F25B9F4EE6 /* Constants.swift */; };
 		16662C20E469CDAD30F83BA3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D436FB58D2A43390024735 /* SettingsView.swift */; };
 		31DD261C8D8E17BE0E2E35B4 /* AssetCatalogKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		330C47720B3DD039E9BE0391 /* Chronicle in Frameworks */ = {isa = PBXBuildFile; productRef = 9CE6E74ABFAB1828AD582452 /* Chronicle */; };
 		352A904267FD3396E9625611 /* CoreUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 64E44E4EE77C280465BE778E /* CoreUI.h */; };
 		364DD984F64DFEF1553AA4B2 /* AssetCatalogEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = CAEF04146BCD9A516D49ED07 /* AssetCatalogEditor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4B70A71AF83D2878C638F8D8 /* CoreSVG.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A778D4B10BEAC84DC595B8B /* CoreSVG.h */; };
@@ -28,10 +29,13 @@
 		AF08401DDABAEF520DC9F7B0 /* AssetCatalogReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 258F4EDC4EF50DA1490AA4E6 /* AssetCatalogReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3B933FC98B153A3FA485709 /* AssetCatalogKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B4E6E27C8B085150FCDDA3B6 /* AssetEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D7FD201EDB5A6E5380D424 /* AssetEditView.swift */; };
+		BDC92B27E1A48BEB2471B7F3 /* Conditionals in Frameworks */ = {isa = PBXBuildFile; productRef = 469065D8A2EF90451F944101 /* Conditionals */; };
 		C33A24E488F30685DA3F47F7 /* AssetsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB5152EC1EA7EC22CACECD2 /* AssetsApp.swift */; };
 		C9B09EF5CE7F7CA1FC8D0F12 /* CAMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5566A7538F0DF0BB0A95A5 /* CAMLView.swift */; };
 		CF8E16A9C579AB78755B7DE9 /* CatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8740892A5E0762B21DC3D62B /* CatalogViewModel.swift */; };
 		D1705612FA897BFDB1D47CF7 /* CAMLContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162F845FC6A424A2C5423EBC /* CAMLContainerView.swift */; };
+		D446E7D7AE0F567264135D7D /* Loupe in Frameworks */ = {isa = PBXBuildFile; productRef = EB3515AF1F3E63BD5B419960 /* Loupe */; };
+		E633EDDAD80F5A6643DF8126 /* Garnish in Frameworks */ = {isa = PBXBuildFile; productRef = 6E5DC0DBE3F2ABB2E950FB3C /* Garnish */; };
 		F8C70C4B8836F91B7D95583C /* ImageExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E19E47B5EDF4D620F1646C2 /* ImageExporter.swift */; };
 		F971C3F97E6CA2FDD12DFBCB /* AssetCatalogKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */; };
 		FA2A44299592BAB1EB135E5A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1AB737A4918A369BADC06E /* ContentView.swift */; };
@@ -119,6 +123,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F971C3F97E6CA2FDD12DFBCB /* AssetCatalogKit.framework in Frameworks */,
+				D446E7D7AE0F567264135D7D /* Loupe in Frameworks */,
+				E633EDDAD80F5A6643DF8126 /* Garnish in Frameworks */,
+				330C47720B3DD039E9BE0391 /* Chronicle in Frameworks */,
+				BDC92B27E1A48BEB2471B7F3 /* Conditionals in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +404,10 @@
 			);
 			name = Assets;
 			packageProductDependencies = (
+				EB3515AF1F3E63BD5B419960 /* Loupe */,
+				6E5DC0DBE3F2ABB2E950FB3C /* Garnish */,
+				9CE6E74ABFAB1828AD582452 /* Chronicle */,
+				469065D8A2EF90451F944101 /* Conditionals */,
 			);
 			productName = Assets;
 			productReference = 4DA75376C35898D60EB592F7 /* Assets.app */;
@@ -433,6 +445,12 @@
 			);
 			mainGroup = 82B9813BBACCB03E10A6107E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				BB467B28ECA40FF63281E104 /* XCRemoteSwiftPackageReference "Chronicle" */,
+				6FDD6D198D940DC95178D6D3 /* XCRemoteSwiftPackageReference "Conditionals" */,
+				EFE29D02C90056F27191F702 /* XCRemoteSwiftPackageReference "Garnish" */,
+				4C6D834BFC161CA3C317253B /* XCRemoteSwiftPackageReference "Loupe" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1AB06EA3D23166E7CA8D3199 /* Products */;
 			projectDirPath = "";
@@ -855,6 +873,64 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4C6D834BFC161CA3C317253B /* XCRemoteSwiftPackageReference "Loupe" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Aeastr/Loupe";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		6FDD6D198D940DC95178D6D3 /* XCRemoteSwiftPackageReference "Conditionals" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Aeastr/Conditionals";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		BB467B28ECA40FF63281E104 /* XCRemoteSwiftPackageReference "Chronicle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Aeastr/Chronicle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		EFE29D02C90056F27191F702 /* XCRemoteSwiftPackageReference "Garnish" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Aeastr/Garnish";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		469065D8A2EF90451F944101 /* Conditionals */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6FDD6D198D940DC95178D6D3 /* XCRemoteSwiftPackageReference "Conditionals" */;
+			productName = Conditionals;
+		};
+		6E5DC0DBE3F2ABB2E950FB3C /* Garnish */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE29D02C90056F27191F702 /* XCRemoteSwiftPackageReference "Garnish" */;
+			productName = Garnish;
+		};
+		9CE6E74ABFAB1828AD582452 /* Chronicle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BB467B28ECA40FF63281E104 /* XCRemoteSwiftPackageReference "Chronicle" */;
+			productName = Chronicle;
+		};
+		EB3515AF1F3E63BD5B419960 /* Loupe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C6D834BFC161CA3C317253B /* XCRemoteSwiftPackageReference "Loupe" */;
+			productName = Loupe;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C83FD0AFE0581CABB537367C /* Project object */;
 }
