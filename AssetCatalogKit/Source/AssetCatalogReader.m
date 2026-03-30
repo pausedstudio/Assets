@@ -69,6 +69,59 @@ static NSString *const kAssetCatalogReaderErrorDomain = @"com.assets.AssetCatalo
     [self readWithCompletionHandler:callback progressHandler:nil];
 }
 
+- (void)readSyncWithMaxCount:(int)max {
+    self.resourceConstrained = YES;
+    self.maxCount = max;
+
+    NSString *catalogPath = [self resolveCatalogPath];
+    if (!catalogPath) {
+        self.error = [NSError errorWithDomain:kAssetCatalogReaderErrorDomain
+                                         code:1
+                                     userInfo:@{NSLocalizedDescriptionKey: @"Unable to find asset catalog path"}];
+        return;
+    }
+
+    NSError *catalogError = nil;
+    self.catalog = [[CUICatalog alloc] initWithURL:[NSURL fileURLWithPath:catalogPath] error:&catalogError];
+    if (catalogError || !self.catalog) {
+        self.error = catalogError ?: [NSError errorWithDomain:kAssetCatalogReaderErrorDomain
+                                                         code:2
+                                                     userInfo:@{NSLocalizedDescriptionKey: @"Failed to open asset catalog"}];
+        return;
+    }
+
+    CUIStructuredThemeStore *themeStore = [self.catalog _themeStore];
+    if (!themeStore) {
+        self.error = [NSError errorWithDomain:kAssetCatalogReaderErrorDomain
+                                         code:3
+                                     userInfo:@{NSLocalizedDescriptionKey: @"Unable to access theme store"}];
+        return;
+    }
+
+    NSArray<CUIRenditionKey *> *allKeys = themeStore.themeStore.allAssetKeys;
+    _totalNumberOfAssets = allKeys.count;
+    NSUInteger totalItemCount = MIN(max, allKeys.count);
+    NSUInteger loadedItemCount = 0;
+
+    for (CUIRenditionKey *key in allKeys) {
+        @autoreleasepool {
+            if (loadedItemCount >= totalItemCount) break;
+
+            @try {
+                CUIThemeRendition *rendition = [themeStore renditionWithKey:key.keyList];
+                if (!rendition) continue;
+
+                if ([self catalogHasRetinaContent] && rendition.scale < 2) continue;
+
+                [self processRendition:rendition withKey:key];
+                loadedItemCount++;
+            } @catch (NSException *exception) {
+                NSLog(@"Exception reading rendition: %@", exception);
+            }
+        }
+    }
+}
+
 - (void)readWithCompletionHandler:(void (^)(void))callback
                   progressHandler:(void (^)(double))progressCallback {
     NSString *catalogPath = [self resolveCatalogPath];

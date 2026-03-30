@@ -11,22 +11,22 @@ settings:
     SWIFT_VERSION: "5.0"
     MACOSX_DEPLOYMENT_TARGET: "15.0"
     CODE_SIGN_STYLE: Automatic
-    DEVELOPMENT_TEAM: ""
+    DEVELOPMENT_TEAM: "7M9N6Y737U"
     SWIFT_STRICT_CONCURRENCY: minimal
 
 packages:
   Loupe:
     url: https://github.com/Aeastr/Loupe
-    from: 1.0.0
+    from: 3.0.0
   Garnish:
     url: https://github.com/Aeastr/Garnish
-    from: 1.0.0
+    branch: main
   Chronicle:
     url: https://github.com/Aeastr/Chronicle
-    from: 1.0.0
+    from: 3.0.0
   Conditionals:
     url: https://github.com/Aeastr/Conditionals
-    from: 1.0.0
+    from: 1.2.0
 
 targets:
   Assets:
@@ -39,6 +39,8 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.paused.Assets
+        ASSETCATALOG_COMPILER_APPICON_NAME: Assets
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         INFOPLIST_GENERATION_MODE: GeneratedFile
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
@@ -53,6 +55,9 @@ targets:
     dependencies:
       - target: AssetCatalogKit
         embed: true
+      - target: AssetCatalogQuickLook
+        embed: true
+      - sdk: Quartz.framework
       - package: Loupe
       - package: Garnish
       - package: Chronicle
@@ -127,6 +132,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.paused.AssetCatalogKit
+        CODE_SIGN_STYLE: Automatic
         INFOPLIST_GENERATION_MODE: GeneratedFile
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
@@ -152,7 +158,6 @@ targets:
   AssetCatalogQuickLook:
     type: app-extension
     platform: macOS
-    product: com.apple.product-type.quicklook-previewer
     sources:
       - path: AssetCatalogQuickLook
     settings:
@@ -163,6 +168,7 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
         GENERATE_INFOPLIST_FILE: YES
         SWIFT_OBJC_BRIDGING_HEADER: ""
+        CODE_SIGN_ENTITLEMENTS: AssetCatalogQuickLook/AssetCatalogQuickLook.entitlements
     dependencies:
       - target: AssetCatalogKit
         embed: true
@@ -172,7 +178,11 @@ targets:
         NSExtension:
           NSExtensionAttributes:
             QLSupportedContentTypes:
+              - com.apple.assetcatalog
               - com.apple.assetcatalog.compiled
+              - com.apple.bundle
+              - com.apple.package
+              - com.apple.application-bundle
             QLSupportsSearchableItems: false
           NSExtensionPointIdentifier: com.apple.quicklook.preview
           NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).PreviewViewController"

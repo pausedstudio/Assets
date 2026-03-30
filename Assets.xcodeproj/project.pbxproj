@@ -21,6 +21,7 @@
 		73EBE6E3F42D2804254A4CC7 /* AssetCatalogKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 06667121EB78C4EB1D11CE0D /* AssetCatalogKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7DE6C4DD48CCDC68E801894C /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA9155EF010BCA8DA625313 /* PreviewViewController.swift */; };
 		7FA76933002D882EAE7FE6BD /* CoreAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF220D6841FD0B5195DF19 /* CoreAnimationView.swift */; };
+		83B44308CB9A8982D66EFA06 /* QuickLookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423D299418821028816FA687 /* QuickLookCoordinator.swift */; };
 		841BCEDB9440F9938F6253B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1BAA3AB2915292840F5E6BE /* Assets.xcassets */; };
 		8DD85B2356D9FA6406579805 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FDD6B1CA6173BC5FE8D2DA /* Asset.swift */; };
 		9E8408087E02A4F964DE11BC /* AssetGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F497C918A46137F194981D /* AssetGridView.swift */; };
@@ -29,12 +30,15 @@
 		AF08401DDABAEF520DC9F7B0 /* AssetCatalogReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 258F4EDC4EF50DA1490AA4E6 /* AssetCatalogReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3B933FC98B153A3FA485709 /* AssetCatalogKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B4E6E27C8B085150FCDDA3B6 /* AssetEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D7FD201EDB5A6E5380D424 /* AssetEditView.swift */; };
+		B7750A9BD93910C7671F0C69 /* Assets.icon in Resources */ = {isa = PBXBuildFile; fileRef = 495E581884B59D8D948DE1E2 /* Assets.icon */; };
 		BDC92B27E1A48BEB2471B7F3 /* Conditionals in Frameworks */ = {isa = PBXBuildFile; productRef = 469065D8A2EF90451F944101 /* Conditionals */; };
 		C33A24E488F30685DA3F47F7 /* AssetsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB5152EC1EA7EC22CACECD2 /* AssetsApp.swift */; };
 		C9B09EF5CE7F7CA1FC8D0F12 /* CAMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5566A7538F0DF0BB0A95A5 /* CAMLView.swift */; };
 		CF8E16A9C579AB78755B7DE9 /* CatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8740892A5E0762B21DC3D62B /* CatalogViewModel.swift */; };
 		D1705612FA897BFDB1D47CF7 /* CAMLContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162F845FC6A424A2C5423EBC /* CAMLContainerView.swift */; };
 		D446E7D7AE0F567264135D7D /* Loupe in Frameworks */ = {isa = PBXBuildFile; productRef = EB3515AF1F3E63BD5B419960 /* Loupe */; };
+		DE2E427704C74CB1671A7BE6 /* AssetCatalogQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FC25194964D3439CE80C87C8 /* AssetCatalogQuickLook.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E341B54C454CC760AE375D6C /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7342D0C8A7A5DA7CD16E340B /* Quartz.framework */; };
 		E633EDDAD80F5A6643DF8126 /* Garnish in Frameworks */ = {isa = PBXBuildFile; productRef = 6E5DC0DBE3F2ABB2E950FB3C /* Garnish */; };
 		F8C70C4B8836F91B7D95583C /* ImageExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E19E47B5EDF4D620F1646C2 /* ImageExporter.swift */; };
 		F971C3F97E6CA2FDD12DFBCB /* AssetCatalogKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */; };
@@ -42,6 +46,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		7517366B719DB2B481D82D02 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C83FD0AFE0581CABB537367C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1C76F838BC4C1D909932D10C;
+			remoteInfo = AssetCatalogQuickLook;
+		};
 		78886ED39DEACD56155CFFB6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C83FD0AFE0581CABB537367C /* Project object */;
@@ -70,6 +81,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9C3080B8613250518EE3AD70 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				DE2E427704C74CB1671A7BE6 /* AssetCatalogQuickLook.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD6A5DC25B8615D671804941 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -94,9 +116,13 @@
 		3A83ADCA08E26DDAFCB69A8F /* AssetCatalogReader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AssetCatalogReader.m; sourceTree = "<group>"; };
 		3C73E1F5EDAD65ECF0749B6E /* CoreAnimationDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAnimationDocument.swift; sourceTree = "<group>"; };
 		3E7B24B57AEDBAC28B62FB9B /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		423D299418821028816FA687 /* QuickLookCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookCoordinator.swift; sourceTree = "<group>"; };
+		495E581884B59D8D948DE1E2 /* Assets.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = Assets.icon; sourceTree = "<group>"; };
 		4DA75376C35898D60EB592F7 /* Assets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Assets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		575720758332D9F25B9F4EE6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		5B17A87BAF6B91EBC2E7174C /* AssetCatalogQuickLook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AssetCatalogQuickLook.entitlements; sourceTree = "<group>"; };
 		64E44E4EE77C280465BE778E /* CoreUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreUI.h; sourceTree = "<group>"; };
+		7342D0C8A7A5DA7CD16E340B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		7A778D4B10BEAC84DC595B8B /* CoreSVG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreSVG.h; sourceTree = "<group>"; };
 		8740892A5E0762B21DC3D62B /* CatalogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewModel.swift; sourceTree = "<group>"; };
 		8AA9155EF010BCA8DA625313 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
@@ -123,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F971C3F97E6CA2FDD12DFBCB /* AssetCatalogKit.framework in Frameworks */,
+				E341B54C454CC760AE375D6C /* Quartz.framework in Frameworks */,
 				D446E7D7AE0F567264135D7D /* Loupe in Frameworks */,
 				E633EDDAD80F5A6643DF8126 /* Garnish in Frameworks */,
 				330C47720B3DD039E9BE0391 /* Chronicle in Frameworks */,
@@ -217,6 +244,7 @@
 				22F497C918A46137F194981D /* AssetGridView.swift */,
 				8BB4A58683FF79886D1F046B /* AssetPreviewView.swift */,
 				9C1AB737A4918A369BADC06E /* ContentView.swift */,
+				423D299418821028816FA687 /* QuickLookCoordinator.swift */,
 				3E7B24B57AEDBAC28B62FB9B /* SidebarView.swift */,
 			);
 			path = Views;
@@ -248,6 +276,7 @@
 				9B29B0226E4EFFE1FA49DDC5 /* Assets */,
 				68CD5D92FD19253CE1B5ED33 /* Private Headers */,
 				8CDBE9827EC83B7CD4AF59CA /* Source */,
+				E4B8099097AAFD1BE22635C4 /* Frameworks */,
 				1AB06EA3D23166E7CA8D3199 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -287,6 +316,7 @@
 			isa = PBXGroup;
 			children = (
 				152DBB1F7B595C52D0184926 /* Assets-Bridging-Header.h */,
+				495E581884B59D8D948DE1E2 /* Assets.icon */,
 				2E1885F02B763D9D0C485E37 /* Info.plist */,
 				5664EB9EE01141BB37800946 /* App */,
 				EAE728274C85BA73004AE482 /* Features */,
@@ -308,10 +338,19 @@
 		B08058FE7CA96838F181A6A9 /* AssetCatalogQuickLook */ = {
 			isa = PBXGroup;
 			children = (
+				5B17A87BAF6B91EBC2E7174C /* AssetCatalogQuickLook.entitlements */,
 				9B85F74C2ECC62D3CE27D961 /* Info.plist */,
 				8AA9155EF010BCA8DA625313 /* PreviewViewController.swift */,
 			);
 			path = AssetCatalogQuickLook;
+			sourceTree = "<group>";
+		};
+		E4B8099097AAFD1BE22635C4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7342D0C8A7A5DA7CD16E340B /* Quartz.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		EAE728274C85BA73004AE482 /* Features */ = {
@@ -395,12 +434,14 @@
 				EE502442BE61C845EC805BA9 /* Sources */,
 				C48E6FE957550BBB4CEB419F /* Resources */,
 				B0A3A96BCBB1F2F309DC3AF8 /* Frameworks */,
+				9C3080B8613250518EE3AD70 /* Embed Foundation Extensions */,
 				31313FA521CA8F06A6DF40B6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				36EFD9CA3FAF2EE92C5E02E4 /* PBXTargetDependency */,
+				C86570810A62E6891BA6DAC8 /* PBXTargetDependency */,
 			);
 			name = Assets;
 			packageProductDependencies = (
@@ -423,15 +464,15 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					001649A8A7A6CF1ABE3CA8DE = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 7M9N6Y737U;
 						ProvisioningStyle = Automatic;
 					};
 					1C76F838BC4C1D909932D10C = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 7M9N6Y737U;
 						ProvisioningStyle = Automatic;
 					};
 					4F7223D3BF971271E80897B3 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 7M9N6Y737U;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -468,6 +509,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7750A9BD93910C7671F0C69 /* Assets.icon in Resources */,
 				841BCEDB9440F9938F6253B0 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -509,6 +551,7 @@
 				FA2A44299592BAB1EB135E5A /* ContentView.swift in Sources */,
 				A3D48685DCDCA558EF58B5A0 /* CoreAnimationDocument.swift in Sources */,
 				7FA76933002D882EAE7FE6BD /* CoreAnimationView.swift in Sources */,
+				83B44308CB9A8982D66EFA06 /* QuickLookCoordinator.swift in Sources */,
 				16662C20E469CDAD30F83BA3 /* SettingsView.swift in Sources */,
 				4C2AA2F58A0A1D04C9E78D39 /* SidebarView.swift in Sources */,
 			);
@@ -521,6 +564,11 @@
 			isa = PBXTargetDependency;
 			target = 001649A8A7A6CF1ABE3CA8DE /* AssetCatalogKit */;
 			targetProxy = A297745F79672EEB59EC5AFD /* PBXContainerItemProxy */;
+		};
+		C86570810A62E6891BA6DAC8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1C76F838BC4C1D909932D10C /* AssetCatalogQuickLook */;
+			targetProxy = 7517366B719DB2B481D82D02 /* PBXContainerItemProxy */;
 		};
 		D8B6B443A4EA1E2A77C41630 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -535,6 +583,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -574,6 +623,7 @@
 		579C022CA2CF093E976EC96B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AssetCatalogQuickLook/AssetCatalogQuickLook.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -594,6 +644,7 @@
 		745C6D46CA6CE9B6AC9DB498 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AssetCatalogQuickLook/AssetCatalogQuickLook.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -647,7 +698,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7M9N6Y737U;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -680,7 +731,8 @@
 		9906A22FB8B91D5FA36D15A6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Assets;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Assets/Assets.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -708,7 +760,8 @@
 		A163E78135D60BD94AF543C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Assets;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Assets/Assets.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -738,6 +791,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -810,7 +864,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7M9N6Y737U;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -880,7 +934,7 @@
 			repositoryURL = "https://github.com/Aeastr/Loupe";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 3.0.0;
 			};
 		};
 		6FDD6D198D940DC95178D6D3 /* XCRemoteSwiftPackageReference "Conditionals" */ = {
@@ -888,7 +942,7 @@
 			repositoryURL = "https://github.com/Aeastr/Conditionals";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.2.0;
 			};
 		};
 		BB467B28ECA40FF63281E104 /* XCRemoteSwiftPackageReference "Chronicle" */ = {
@@ -896,15 +950,15 @@
 			repositoryURL = "https://github.com/Aeastr/Chronicle";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 3.0.0;
 			};
 		};
 		EFE29D02C90056F27191F702 /* XCRemoteSwiftPackageReference "Garnish" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Aeastr/Garnish";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

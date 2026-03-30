@@ -69,6 +69,10 @@ typedef NS_ENUM(NSInteger, ACKAssetType) {
 - (void)resourceConstrainedReadWithMaxCount:(int)max
                           completionHandler:(void (^)(void))callback;
 
+/// Synchronous read for use in extension contexts (no main queue dispatch)
+/// @param max Maximum number of assets to load
+- (void)readSyncWithMaxCount:(int)max;
+
 /// Cancel an in-progress read operation
 - (void)cancelReading;
 

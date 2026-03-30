@@ -1,0 +1,51 @@
+{
+  "originHash" : "33470507f9ac361762a6548e41c16c0ab68632abf453dfbffba4098066c110cb",
+  "pins" : [
+    {
+      "identity" : "chronicle",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Aeastr/Chronicle",
+      "state" : {
+        "revision" : "78f4d0d634c4834f13f7ab1bcca79c150c4c172a",
+        "version" : "3.0.2"
+      }
+    },
+    {
+      "identity" : "conditionals",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Aeastr/Conditionals",
+      "state" : {
+        "revision" : "d9d13d2ac5d095354299857c86d8d44f9b6e9e51",
+        "version" : "1.2.3"
+      }
+    },
+    {
+      "identity" : "garnish",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Aeastr/Garnish",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ffbd0091ed25eb3e250ca47b5ccc8c4f9a6a3420"
+      }
+    },
+    {
+      "identity" : "loupe",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Aeastr/Loupe",
+      "state" : {
+        "revision" : "eb0d2dc4fa053447b643ec7a2d62fc007432014b",
+        "version" : "3.0.0"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log.git",
+      "state" : {
+        "revision" : "bbd81b6725ae874c69e9b8c8804d462356b55523",
+        "version" : "1.10.1"
+      }
+    }
+  ],
+  "version" : 3
+}

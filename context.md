@@ -13,7 +13,17 @@ macOS document-based app for browsing, previewing, and exporting assets from com
 - **AssetCatalogQuickLook** (QL extension) - Quick Look previewer for `.car` files
 - Uses XcodeGen (`project.yml`) to generate `.xcodeproj`
 
-## Recent Changes (2026-03-15)
+## Recent Changes (2026-03-29)
+
+- Added Quick Look support for asset previews
+  - New `QuickLookCoordinator.swift` - manages `QLPreviewPanel` lifecycle, writes temp image files
+  - `QuickLookResponderView` (NSView) accepts panel control so the responder chain works
+  - `QuickLookResponder` (NSViewRepresentable) bridges into SwiftUI
+  - Spacebar toggles Quick Look on/off for the currently selected asset
+  - "Quick Look" added to asset context menu in grid and list views
+  - Added `Quartz.framework` SDK dependency in `project.yml`
+
+## Previous Changes (2026-03-15)
 
 - Added Core Animation file support (`.caar`, `.caml`, `.ca` bundle) - ported from Shasta
   - `Assets/Private Headers/QuartzCorePrivate.h` - CAPackage, CAStateController private API declarations

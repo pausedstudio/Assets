@@ -24,7 +24,11 @@
 		<dict>
 			<key>QLSupportedContentTypes</key>
 			<array>
+				<string>com.apple.assetcatalog</string>
 				<string>com.apple.assetcatalog.compiled</string>
+				<string>com.apple.bundle</string>
+				<string>com.apple.package</string>
+				<string>com.apple.application-bundle</string>
 			</array>
 			<key>QLSupportsSearchableItems</key>
 			<false/>
