@@ -38,20 +38,24 @@ struct ContentView: View {
     .onAppear {
       document.viewModel.loadCatalog(from: document.fileURL)
     }
-    .onReceive(NotificationCenter.default.publisher(for: .exportAllAssets)) { _ in
-      exportMode = .all
-      showingExportPanel = true
-    }
-    .onReceive(NotificationCenter.default.publisher(for: .exportSelectedAssets)) { _ in
-      exportMode = .selected
-      showingExportPanel = true
-    }
-    .onReceive(NotificationCenter.default.publisher(for: .selectAll)) { _ in
-      document.viewModel.selectAll()
-    }
-    .onReceive(NotificationCenter.default.publisher(for: .copyAssets)) { _ in
-      copyAssets()
-    }
+    .focusedSceneValue(
+      \.assetActions,
+      AssetDocumentActions(
+        hasSelection: document.viewModel.hasSelection || selectedAsset != nil,
+        copy: copyAssets,
+        copyName: copyAssetNames,
+        selectAll: { document.viewModel.selectAll() },
+        exportAll: {
+          exportMode = .all
+          showingExportPanel = true
+        },
+        exportSelected: {
+          exportMode = .selected
+          showingExportPanel = true
+        },
+        focusSearch: { isSearchPresented = true }
+      )
+    )
     .fileExporter(
       isPresented: $showingExportPanel,
       document: ExportFolderDocument(),
@@ -63,12 +67,22 @@ struct ContentView: View {
   }
 
   private func copyAssets() {
-    if let asset = selectedAsset {
-      // Copy the previewed asset
-      document.viewModel.copyAssetsToPasteboard([asset])
-    } else {
-      // Fall back to selected assets
-      document.viewModel.copySelectedAssets()
+    let vm = document.viewModel
+    if vm.selectedAssets.count > 1 {
+      vm.copySelectedAssets()
+    } else if let asset = selectedAsset {
+      vm.copyAssetsToPasteboard([asset])
+    } else if vm.hasSelection {
+      vm.copySelectedAssets()
+    }
+  }
+
+  private func copyAssetNames() {
+    let vm = document.viewModel
+    if vm.hasSelection {
+      vm.copySelectedAssetNames()
+    } else if let asset = selectedAsset {
+      AssetPasteboardWriter.copyNames(of: [asset])
     }
   }
 

@@ -18,41 +18,7 @@ struct AssetsApp: App {
       // Remove New menu item (read-only app)
       CommandGroup(replacing: .newItem) {}
 
-      // Add export commands
-      CommandGroup(after: .importExport) {
-        Button("Export All Assets...") {
-          NotificationCenter.default.post(name: .exportAllAssets, object: nil)
-        }
-        .keyboardShortcut("e", modifiers: [.command, .shift])
-
-        Button("Export Selected Assets...") {
-          NotificationCenter.default.post(name: .exportSelectedAssets, object: nil)
-        }
-        .keyboardShortcut("e", modifiers: .command)
-      }
-
-      // Edit menu - replace pasteboard commands
-      CommandGroup(replacing: .pasteboard) {
-        Button("Copy") {
-          NotificationCenter.default.post(name: .copyAssets, object: nil)
-        }
-        .keyboardShortcut("c", modifiers: .command)
-
-        Divider()
-
-        Button("Select All") {
-          NotificationCenter.default.post(name: .selectAll, object: nil)
-        }
-        .keyboardShortcut("a", modifiers: .command)
-      }
-
-      // View menu - toggle preview
-      CommandGroup(after: .sidebar) {
-        Button("Toggle Preview") {
-          NotificationCenter.default.post(name: .togglePreview, object: nil)
-        }
-        .keyboardShortcut("p", modifiers: [.command, .shift])
-      }
+      AssetMenuCommands()
     }
 
     DocumentGroup(newDocument: CoreAnimationDocument()) { file in
@@ -63,16 +29,6 @@ struct AssetsApp: App {
       SettingsView()
     }
   }
-}
-
-// MARK: - Notification Names
-
-extension Notification.Name {
-  static let exportAllAssets = Notification.Name("exportAllAssets")
-  static let exportSelectedAssets = Notification.Name("exportSelectedAssets")
-  static let selectAll = Notification.Name("selectAllAssets")
-  static let copyAssets = Notification.Name("copyAssets")
-  static let togglePreview = Notification.Name("togglePreview")
 }
 
 // MARK: - Asset Catalog Document
