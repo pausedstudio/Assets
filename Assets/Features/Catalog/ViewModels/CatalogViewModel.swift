@@ -425,55 +425,19 @@ final class CatalogViewModel: @unchecked Sendable {
         await exporter.export(toDirectoryAt: directory)
     }
 
+    @MainActor
     func copyAssetsToPasteboard(_ assets: [Asset]) {
-        let pasteboard = NSPasteboard.general
-        pasteboard.clearContents()
-
-        if assets.count == 1, let asset = assets.first {
-            // Single asset: copy as image data for direct pasting into apps
-            var pasteboardItems: [NSPasteboardItem] = []
-            let item = NSPasteboardItem()
-
-            // Add TIFF representation (universal image format for pasteboard)
-            if let tiffData = asset.image.tiffRepresentation {
-                item.setData(tiffData, forType: .tiff)
-            }
-
-            // Add PNG data
-            if !asset.data.isEmpty {
-                item.setData(asset.data, forType: .png)
-            }
-
-            // Add file URL
-            let tempURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent(asset.filename)
-            if let _ = try? asset.data.write(to: tempURL, options: .atomic) {
-                item.setString(tempURL.absoluteString, forType: .fileURL)
-            }
-
-            pasteboardItems.append(item)
-            pasteboard.writeObjects(pasteboardItems)
-        } else {
-            // Multiple assets: copy as file URLs
-            let urls: [NSURL] = assets.compactMap { asset in
-                let tempURL = FileManager.default.temporaryDirectory
-                    .appendingPathComponent(asset.filename)
-
-                do {
-                    try asset.data.write(to: tempURL, options: .atomic)
-                    return tempURL as NSURL
-                } catch {
-                    print("Failed to write temp file: \(error)")
-                    return nil
-                }
-            }
-
-            pasteboard.writeObjects(urls)
-        }
+        AssetPasteboardWriter.copy(assets)
     }
 
+    @MainActor
     func copySelectedAssets() {
         copyAssetsToPasteboard(selectedAssetObjects)
+    }
+
+    @MainActor
+    func copySelectedAssetNames() {
+        AssetPasteboardWriter.copyNames(of: selectedAssetObjects)
     }
 
     // MARK: - Editing
