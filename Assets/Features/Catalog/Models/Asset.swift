@@ -247,18 +247,16 @@ extension UTType {
 
 extension Asset: Transferable {
     static var transferRepresentation: some TransferRepresentation {
-        FileRepresentation(exportedContentType: .svg) { asset in
-            SentTransferredFile(try asset.writeTemporaryFile())
-        }
-        .exportingCondition { $0.isVector }
+        // Concrete file URL first: Chromium-based receivers (Figma, Slack, VS Code)
+        // read only NSPasteboardTypeFileURL from drops and never resolve the file
+        // promises that FileRepresentation vends on the macOS drag pasteboard.
+        // The exporter runs lazily at fulfillment time — once per drag, not at render.
+        ProxyRepresentation(exporting: { asset in
+            try asset.writeTemporaryFile()
+        })
 
         DataRepresentation(exportedContentType: .svg) { $0.data }
             .exportingCondition { $0.isVector }
-
-        FileRepresentation(exportedContentType: .png) { asset in
-            SentTransferredFile(try asset.writeTemporaryFile())
-        }
-        .exportingCondition { !$0.isVector }
 
         DataRepresentation(exportedContentType: .png) { $0.data }
             .exportingCondition { !$0.isVector }
