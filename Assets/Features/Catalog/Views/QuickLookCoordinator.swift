@@ -68,12 +68,18 @@ final class QuickLookCoordinator: NSObject, QLPreviewPanelDataSource, QLPreviewP
       let contentView = window.contentView
     else { return }
 
-    // Check if we already installed one
-    if contentView.subviews.contains(where: { $0 is QuickLookResponderView }) { return }
+    let responder =
+      contentView.subviews.first { $0 is QuickLookResponderView }
+      ?? {
+        let view = QuickLookResponderView()
+        view.frame = .zero
+        contentView.addSubview(view)
+        return view
+      }()
 
-    let responder = QuickLookResponderView()
-    responder.frame = .zero
-    contentView.addSubview(responder)
+    // Always re-assert first responder: QLPreviewPanel finds its controller by
+    // walking the responder chain, which would miss this view when e.g. the
+    // list's NSTableView has focus.
     window.makeFirstResponder(responder)
   }
 
@@ -154,30 +160,39 @@ struct QuickLookModifier: ViewModifier {
   @Binding var selectedAsset: Asset?
   let viewModel: CatalogViewModel
   @State private var monitor: Any?
+  @State private var hostWindow: NSWindow?
 
   func body(content: Content) -> some View {
     content
+      .background(WindowReader(window: $hostWindow))
       .onAppear {
         monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+          // Only handle keys aimed at this document window while it's key
+          guard let host = hostWindow, event.window === host, host.isKeyWindow else {
+            return event
+          }
+
           // Don't intercept if a text field has focus
-          if NSApp.keyWindow?.firstResponder is NSTextView { return event }
+          if host.firstResponder is NSTextView { return event }
+
+          // Let command/option/control shortcuts reach the system
+          if !event.modifierFlags.intersection([.command, .option, .control]).isEmpty {
+            return event
+          }
 
           switch event.keyCode {
           case 49:  // spacebar
             QuickLookCoordinator.shared.toggle(asset: selectedAsset)
             return nil
-          case 123:  // left arrow
-            moveSelection(by: -1)
-            return nil
-          case 124:  // right arrow
-            moveSelection(by: 1)
-            return nil
-          case 125:  // down arrow
-            moveSelection(by: columnsInGrid())
-            return nil
-          case 126:  // up arrow
-            moveSelection(by: -columnsInGrid())
-            return nil
+          case 53:  // escape
+            if let panel = QLPreviewPanel.shared(), panel.isVisible { return event }
+            if !viewModel.searchText.isEmpty {
+              viewModel.searchText = ""
+              return nil
+            }
+            return event
+          case 123, 124, 125, 126:  // arrows
+            return handleArrow(event)
           default:
             return event
           }
@@ -189,6 +204,43 @@ struct QuickLookModifier: ViewModifier {
         }
         monitor = nil
       }
+  }
+
+  // MARK: - Arrow Navigation
+
+  private func handleArrow(_ event: NSEvent) -> NSEvent? {
+    let isVertical = event.keyCode == 125 || event.keyCode == 126
+    let isForward = event.keyCode == 124 || event.keyCode == 125
+    let isShiftHeld = event.modifierFlags.contains(.shift)
+
+    switch viewModel.viewMode {
+    case .list:
+      // Horizontal arrows have no meaning in a list
+      guard isVertical else { return event }
+      let step = isForward ? 1 : -1
+
+      if let panel = QLPreviewPanel.shared(), panel.isVisible {
+        // Table can't navigate while the panel is open; drive selection directly
+        if isShiftHeld { extendSelection(by: step) } else { moveSelection(by: step) }
+        return nil
+      }
+      if event.window?.firstResponder is NSTableView {
+        // Native Table navigation: correct order, auto-scroll, shift-extend
+        return event
+      }
+      if isShiftHeld { extendSelection(by: step) } else { moveSelection(by: step) }
+      return nil
+
+    case .grid:
+      let step: Int
+      if isVertical {
+        step = isForward ? viewModel.gridColumnCount : -viewModel.gridColumnCount
+      } else {
+        step = isForward ? 1 : -1
+      }
+      if isShiftHeld { extendSelection(by: step) } else { moveSelection(by: step) }
+      return nil
+    }
   }
 
   private func moveSelection(by offset: Int) {
@@ -208,6 +260,7 @@ struct QuickLookModifier: ViewModifier {
     let asset = assets[newIndex]
     selectedAsset = asset
     viewModel.selectedAssets = [asset.id]
+    viewModel.selectionAnchorID = asset.id
 
     // Update Quick Look if panel is open
     if let panel = QLPreviewPanel.shared(), panel.isVisible {
@@ -215,13 +268,39 @@ struct QuickLookModifier: ViewModifier {
     }
   }
 
-  /// Estimate grid columns from window width (matches grid's adaptive 120-180pt items)
-  private func columnsInGrid() -> Int {
-    guard let window = NSApp.keyWindow else { return 4 }
-    // Rough: content area minus sidebar, divided by item size + spacing
-    let availableWidth = window.contentView?.bounds.width ?? 600
-    let gridWidth = max(availableWidth - 240, 300)  // subtract sidebar estimate
-    return max(1, Int(gridWidth / 132))  // 120 item + 12 spacing
+  /// Extends the range selection from the anchor; the cursor follows the extension edge.
+  private func extendSelection(by offset: Int) {
+    let assets = viewModel.filteredAssets
+    guard !assets.isEmpty else { return }
+
+    let currentIndex: Int
+    if let selected = selectedAsset,
+      let idx = assets.firstIndex(where: { $0.id == selected.id })
+    {
+      currentIndex = idx
+    } else {
+      currentIndex = -1
+    }
+
+    let newIndex = max(0, min(assets.count - 1, currentIndex + offset))
+    let target = assets[newIndex]
+    viewModel.selectRange(to: target)
+    selectedAsset = target
+  }
+}
+
+// MARK: - Window Reader
+
+/// Captures the NSWindow hosting a SwiftUI view so event monitors can scope to it
+private struct WindowReader: NSViewRepresentable {
+  @Binding var window: NSWindow?
+
+  func makeNSView(context: Context) -> NSView { NSView() }
+
+  func updateNSView(_ nsView: NSView, context: Context) {
+    DispatchQueue.main.async {
+      window = nsView.window
+    }
   }
 }
 

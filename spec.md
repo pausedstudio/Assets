@@ -1,6 +1,6 @@
 # Assets — Spec
 
-_Last updated: 2026-04-07_
+_Last updated: 2026-06-12_
 
 ## Overview
 
@@ -48,7 +48,14 @@ macOS document-based app for browsing, previewing, and exporting assets from com
 
 ## Current State
 
-_TBD_
+### Clipboard / Drag / Keyboard round (2026-06-12, in progress)
+
+- `Assets/Shared/AssetTempFiles.swift` — unique per-operation temp export dirs under `AssetsExport/<UUID>/`, stale cleanup (>1h) on catalog load
+- `Assets/Shared/AssetPasteboardWriter.swift` — vector-aware copy: SVG text + `public.svg-image` + file URL with TIFF last (vectors); PNG-first (bitmaps); multi-asset copy writes deduped temp files as pure file URLs
+- `Asset.transferRepresentation` rewritten — vectors drag/export as `.svg`, bitmaps as `.png`, each via a fresh temp dir
+- `CatalogViewModel` now owns `viewMode` (lifted from `AssetGridView`), `gridColumnCount`, `selectionAnchorID`, and `selectRange(to:)` (Finder-style range selection); `AssetGridView` uses `@Bindable` + `$viewModel.searchText`
+- `QuickLookModifier` monitor rewritten — scoped to its host window via `WindowReader` + key-window guard (multi-window safe); passes through text editing and Cmd/Opt/Ctrl shortcuts; Esc clears search when Quick Look is closed; list mode arrows move ±1 (native Table nav when the Table is focused); grid mode uses `viewModel.gridColumnCount`; Shift+arrows extend the range selection. `ensureResponder()` always re-asserts first responder so Quick Look opens after the Table had focus
+- Remaining this round: grid geometry measurement + scroll-to-selection, Table multi-select/drag rewrite, grid drag container (macOS 26), FocusedValues command migration (Edit menu / paste fix)
 
 ## Open Questions
 
