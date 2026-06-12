@@ -13,7 +13,10 @@ struct AssetGridView: View {
   @Binding var selectedAsset: Asset?
   @Binding var isSearchPresented: Bool
 
-  private let gridColumns = [GridItem(.adaptive(minimum: 120, maximum: 180), spacing: 12)]
+  private static let itemMinWidth: CGFloat = 120
+  private static let itemSpacing: CGFloat = 12
+
+  private let gridColumns = [GridItem(.adaptive(minimum: itemMinWidth, maximum: 180), spacing: itemSpacing)]
 
   var body: some View {
     Group {
@@ -85,41 +88,50 @@ struct AssetGridView: View {
 
   @ViewBuilder
   private var gridContent: some View {
-    ScrollView {
-      LazyVGrid(columns: gridColumns, spacing: 12) {
-        ForEach(viewModel.filteredAssets) { asset in
-          AssetGridItem(
-            asset: asset,
-            size: 120,
-            isSelected: viewModel.selectedAssets.contains(asset.id)
-          )
-          .background {
-            GeometryReader { geo in
-              Color.clear
-                .onChange(of: selectedAsset?.id) { _, newID in
-                  if newID == asset.id {
-                    updateSourceFrame(geo: geo, image: asset.thumbnail)
+    ScrollViewReader { proxy in
+      ScrollView {
+        LazyVGrid(columns: gridColumns, spacing: 12) {
+          ForEach(viewModel.filteredAssets) { asset in
+            AssetGridItem(
+              asset: asset,
+              size: Self.itemMinWidth,
+              isSelected: viewModel.selectedAssets.contains(asset.id)
+            )
+            .background {
+              GeometryReader { geo in
+                Color.clear
+                  .onChange(of: selectedAsset?.id) { _, newID in
+                    if newID == asset.id {
+                      updateSourceFrame(geo: geo, image: asset.thumbnail)
+                    }
                   }
-                }
-                .onAppear {
-                  if selectedAsset?.id == asset.id {
-                    updateSourceFrame(geo: geo, image: asset.thumbnail)
+                  .onAppear {
+                    if selectedAsset?.id == asset.id {
+                      updateSourceFrame(geo: geo, image: asset.thumbnail)
+                    }
                   }
-                }
+              }
+            }
+            .onTapGesture {
+              handleTap(asset)
+            }
+            .contextMenu {
+              assetContextMenu(for: asset)
+            }
+            .draggable(asset) {
+              AssetDragPreview(asset: asset)
             }
           }
-          .onTapGesture {
-            handleTap(asset)
-          }
-          .contextMenu {
-            assetContextMenu(for: asset)
-          }
-          .draggable(asset) {
-            AssetDragPreview(asset: asset)
-          }
         }
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width in
+          viewModel.gridColumnCount = max(1, Int((width + Self.itemSpacing) / (Self.itemMinWidth + Self.itemSpacing)))
+        }
+        .padding()
       }
-      .padding()
+      .onChange(of: selectedAsset?.id) { _, newID in
+        guard let newID else { return }
+        proxy.scrollTo(newID, anchor: nil)
+      }
     }
   }
 
