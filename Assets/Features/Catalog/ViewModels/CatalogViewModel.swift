@@ -95,6 +95,7 @@ final class CatalogViewModel: @unchecked Sendable {
     // MARK: - Loading
 
     func loadCatalog(from url: URL) {
+        AssetTempFiles.cleanUpStale()
         fileURL = url
         isLoading = true
         loadingProgress = 0
