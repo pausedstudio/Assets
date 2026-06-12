@@ -24,6 +24,8 @@ struct Asset: Identifiable, Hashable {
     let height: CGFloat
     let isVector: Bool
     let assetType: AssetType
+    /// Lowercased name, precomputed once so search passes never re-lowercase per asset per call
+    let searchKey: String
 
     enum AssetType: Int, CaseIterable {
         case image = 0
@@ -60,6 +62,7 @@ struct Asset: Identifiable, Hashable {
 
     init(from dictionary: [String: Any]) {
         self.name = dictionary["name"] as? String ?? "Unknown"
+        self.searchKey = self.name.lowercased()
         self.filename = dictionary["filename"] as? String ?? "unknown.png"
         self.image = dictionary["image"] as? NSImage ?? NSImage()
         self.thumbnail = dictionary["thumbnail"] as? NSImage ?? NSImage()
@@ -153,7 +156,9 @@ struct AssetGroup: Identifiable, Hashable {
 // MARK: - Color Analysis
 
 extension Asset {
-    /// Cached dominant color in HSB format
+    /// Dominant color in HSB, averaged from thumbnail pixel samples.
+    /// Expensive on every call (TIFF encode + per-pixel sampling) — callers
+    /// should go through `AssetFilterCaches.dominantColorHSB(for:epoch:)`.
     var dominantColorHSB: (hue: Double, saturation: Double, brightness: Double)? {
         guard let tiffData = thumbnail.tiffRepresentation,
               let bitmap = NSBitmapImageRep(data: tiffData) else {

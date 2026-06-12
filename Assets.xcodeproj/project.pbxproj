@@ -20,6 +20,7 @@
 		66D46F9CBE52EEFE99B7D6C0 /* AssetCatalogKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08EE5A5D7D8D3868425B9A0A /* AssetCatalogKit.framework */; };
 		697E1C48D7DBB63183CA15D9 /* AssetCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4CC267F23D1BB04CFA83E0 /* AssetCommands.swift */; };
 		73EBE6E3F42D2804254A4CC7 /* AssetCatalogKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 06667121EB78C4EB1D11CE0D /* AssetCatalogKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7D8188CF5008432821A5D544 /* AssetFilterEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D1EF2C9A4275950205D9A9 /* AssetFilterEngine.swift */; };
 		7DE6C4DD48CCDC68E801894C /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA9155EF010BCA8DA625313 /* PreviewViewController.swift */; };
 		7FA76933002D882EAE7FE6BD /* CoreAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF220D6841FD0B5195DF19 /* CoreAnimationView.swift */; };
 		83B44308CB9A8982D66EFA06 /* QuickLookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423D299418821028816FA687 /* QuickLookCoordinator.swift */; };
@@ -143,6 +144,7 @@
 		C9D436FB58D2A43390024735 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		CAEF04146BCD9A516D49ED07 /* AssetCatalogEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetCatalogEditor.h; sourceTree = "<group>"; };
 		CE5566A7538F0DF0BB0A95A5 /* CAMLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAMLView.swift; sourceTree = "<group>"; };
+		D3D1EF2C9A4275950205D9A9 /* AssetFilterEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetFilterEngine.swift; sourceTree = "<group>"; };
 		DBB5152EC1EA7EC22CACECD2 /* AssetsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsApp.swift; sourceTree = "<group>"; };
 		E1BAA3AB2915292840F5E6BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ECE9F8A6AB50CBB7AD01E3D8 /* AssetPasteboardWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetPasteboardWriter.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 		88B27B9107715E4007CE1A30 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				D3D1EF2C9A4275950205D9A9 /* AssetFilterEngine.swift */,
 				8740892A5E0762B21DC3D62B /* CatalogViewModel.swift */,
 			);
 			path = ViewModels;
@@ -551,6 +554,7 @@
 				8DD85B2356D9FA6406579805 /* Asset.swift in Sources */,
 				697E1C48D7DBB63183CA15D9 /* AssetCommands.swift in Sources */,
 				B4E6E27C8B085150FCDDA3B6 /* AssetEditView.swift in Sources */,
+				7D8188CF5008432821A5D544 /* AssetFilterEngine.swift in Sources */,
 				9E8408087E02A4F964DE11BC /* AssetGridView.swift in Sources */,
 				C5AC2BB47DD805E0F22FE3CF /* AssetPasteboardWriter.swift in Sources */,
 				5F02961B6779CBC4DDA8CF16 /* AssetPreviewView.swift in Sources */,
