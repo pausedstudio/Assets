@@ -12,7 +12,6 @@ import UniformTypeIdentifiers
 enum AssetPasteboardWriter {
     static func copy(_ assets: [Asset], to pasteboard: NSPasteboard = .general) {
         guard !assets.isEmpty else { return }
-        pasteboard.clearContents()
 
         if assets.count == 1, let asset = assets.first {
             copySingle(asset, to: pasteboard)
@@ -57,6 +56,7 @@ enum AssetPasteboardWriter {
             }
         }
 
+        pasteboard.clearContents()
         pasteboard.writeObjects([item])
     }
 
@@ -73,6 +73,10 @@ enum AssetPasteboardWriter {
             return url as NSURL
         }
 
+        // Only clear once there is something to write — a failed temp write
+        // must never destroy the user's existing clipboard.
+        guard !urls.isEmpty else { return }
+        pasteboard.clearContents()
         pasteboard.writeObjects(urls)
     }
 

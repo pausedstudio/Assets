@@ -79,10 +79,12 @@ struct ContentView: View {
 
   private func copyAssetNames() {
     let vm = document.viewModel
-    if vm.hasSelection {
+    if vm.selectedAssets.count > 1 {
       vm.copySelectedAssetNames()
     } else if let asset = selectedAsset {
       AssetPasteboardWriter.copyNames(of: [asset])
+    } else if vm.hasSelection {
+      vm.copySelectedAssetNames()
     }
   }
 
@@ -90,11 +92,25 @@ struct ContentView: View {
     guard case .success(let url) = result else { return }
 
     Task {
-      let assets =
-        exportMode == .all
-        ? document.viewModel.filteredAssets : document.viewModel.selectedAssetObjects
+      let vm = document.viewModel
+      let assets: [Asset]
+      switch exportMode {
+      case .all:
+        assets = vm.filteredAssets
+      case .selected:
+        // Mirror the copy commands: fall back to the previewed asset when
+        // the multi-selection set is empty, so Export Selected never writes
+        // an empty folder.
+        if !vm.selectedAssetObjects.isEmpty {
+          assets = vm.selectedAssetObjects
+        } else if let asset = selectedAsset {
+          assets = [asset]
+        } else {
+          assets = []
+        }
+      }
 
-      await document.viewModel.exportAssets(assets, to: url)
+      await vm.exportAssets(assets, to: url)
     }
   }
 }

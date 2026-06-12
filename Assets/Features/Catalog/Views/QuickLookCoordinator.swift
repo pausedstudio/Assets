@@ -64,7 +64,11 @@ final class QuickLookCoordinator: NSObject, QLPreviewPanelDataSource, QLPreviewP
   // MARK: - Responder
 
   private func ensureResponder() {
-    guard let window = NSApp.keyWindow,
+    // Use the main window, not the key window: when refreshing the preview
+    // while the panel is open (arrow-flipping), the QL panel itself is key —
+    // grafting the responder view into the panel would steal its first
+    // responder. The owning document window stays main throughout.
+    guard let window = NSApp.mainWindow,
       let contentView = window.contentView
     else { return }
 
@@ -160,17 +164,22 @@ struct QuickLookModifier: ViewModifier {
   @Binding var selectedAsset: Asset?
   let viewModel: CatalogViewModel
   @State private var monitor: Any?
-  @State private var hostWindow: NSWindow?
+  @State private var hostWindow = WeakWindowBox()
 
   func body(content: Content) -> some View {
     content
-      .background(WindowReader(window: $hostWindow))
+      .background(WindowReader(box: hostWindow))
       .onAppear {
         monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-          // Only handle keys aimed at this document window while it's key
-          guard let host = hostWindow, event.window === host, host.isKeyWindow else {
-            return event
-          }
+          // Handle keys aimed at this document window while it's key, or at
+          // the Quick Look panel while this window is main — the panel takes
+          // key status when it opens, and arrow-flipping must keep working.
+          guard let host = hostWindow.window else { return event }
+          let panel = QLPreviewPanel.sharedPreviewPanelExists() ? QLPreviewPanel.shared() : nil
+          let hostHasKeys = event.window === host && host.isKeyWindow
+          let panelHasKeys =
+            panel?.isVisible == true && event.window === panel && host.isMainWindow
+          guard hostHasKeys || panelHasKeys else { return event }
 
           // Don't intercept if a text field has focus
           if host.firstResponder is NSTextView { return event }
@@ -291,15 +300,22 @@ struct QuickLookModifier: ViewModifier {
 
 // MARK: - Window Reader
 
+/// Weakly boxes the host window: a strong NSWindow in `@State` would create a
+/// window → view graph → state → window retain cycle that leaks the whole
+/// document window (and its catalog) on close.
+private final class WeakWindowBox {
+  weak var window: NSWindow?
+}
+
 /// Captures the NSWindow hosting a SwiftUI view so event monitors can scope to it
 private struct WindowReader: NSViewRepresentable {
-  @Binding var window: NSWindow?
+  let box: WeakWindowBox
 
   func makeNSView(context: Context) -> NSView { NSView() }
 
   func updateNSView(_ nsView: NSView, context: Context) {
-    DispatchQueue.main.async {
-      window = nsView.window
+    DispatchQueue.main.async { [weak nsView] in
+      box.window = nsView?.window
     }
   }
 }

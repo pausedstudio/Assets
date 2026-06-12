@@ -48,14 +48,30 @@ macOS document-based app for browsing, previewing, and exporting assets from com
 
 ## Current State
 
-### Clipboard / Drag / Keyboard round (2026-06-12, in progress)
+### Clipboard / Drag / Keyboard round (2026-06-12, complete)
+
+**Pasteboard formats** (`Assets/Shared/AssetPasteboardWriter.swift`, `@MainActor`):
+
+| Copy target | Types written (writer-preference order) |
+| --- | --- |
+| Single vector | `.string` (SVG XML — Figma pastes editable vectors), `public.svg-image`, `.fileURL` (temp `.svg`), `.tiff` (raster last resort) |
+| Single bitmap | `.png` (authoritative bytes), `.tiff`, `.fileURL` (temp `.png`) |
+| Multiple assets | pure file URLs from one fresh temp dir, filenames deduped — no image flavor (image targets would silently drop N−1) |
+
+The pasteboard is only cleared once a payload is known-good — a failed temp write never destroys the existing clipboard. Empty input is a no-op.
+
+**Shipped this round:**
 
 - `Assets/Shared/AssetTempFiles.swift` — unique per-operation temp export dirs under `AssetsExport/<UUID>/`, stale cleanup (>1h) on catalog load
-- `Assets/Shared/AssetPasteboardWriter.swift` — vector-aware copy: SVG text + `public.svg-image` + file URL with TIFF last (vectors); PNG-first (bitmaps); multi-asset copy writes deduped temp files as pure file URLs
-- `Asset.transferRepresentation` rewritten — vectors drag/export as `.svg`, bitmaps as `.png`, each via a fresh temp dir
-- `CatalogViewModel` now owns `viewMode` (lifted from `AssetGridView`), `gridColumnCount`, `selectionAnchorID`, and `selectRange(to:)` (Finder-style range selection); `AssetGridView` uses `@Bindable` + `$viewModel.searchText`
-- `QuickLookModifier` monitor rewritten — scoped to its host window via `WindowReader` + key-window guard (multi-window safe); passes through text editing and Cmd/Opt/Ctrl shortcuts; Esc clears search when Quick Look is closed; list mode arrows move ±1 (native Table nav when the Table is focused); grid mode uses `viewModel.gridColumnCount`; Shift+arrows extend the range selection. `ensureResponder()` always re-asserts first responder so Quick Look opens after the Table had focus
-- Remaining this round: grid geometry measurement + scroll-to-selection, Table multi-select/drag rewrite, grid drag container (macOS 26), FocusedValues command migration (Edit menu / paste fix)
+- `Asset.transferRepresentation` rewritten — vectors drag/export as `.svg`, bitmaps as `.png` (file representation first, data fallback, `exportingCondition` per kind), each via a fresh temp dir
+- `CatalogViewModel` owns `viewMode` (lifted from `AssetGridView`), `gridColumnCount`, `selectionAnchorID`, and `selectRange(to:)` (Finder-style range selection); `AssetGridView` uses `@Bindable` + `$viewModel.searchText`
+- Grid: real column count measured via `onGeometryChange` (replaces the width estimate); `ScrollViewReader` keeps arrow-key selection on-screen; macOS 26 drag container carries the whole selection (single-tile drag on macOS 15 — documented limitation)
+- List: rows-builder `Table` bound to `viewModel.selectedAssets` — native multi-select, shift/cmd-click, row drag via `TableRow.draggable`, selection-aware context menus shared with the grid
+- `QuickLookModifier` monitor — scoped per window: handles keys from the host window while key, or from the Quick Look panel while the host is main (the panel becomes key when it opens, so arrow-flipping with QL open works in both modes); the host window is captured weakly (`WeakWindowBox` + `WindowReader`) so closing a document leaks nothing; passes through text editing and Cmd/Opt/Ctrl shortcuts; Esc clears search when QL is closed; Shift+arrows extend the range selection; `ensureResponder()` targets the main window and always re-asserts first responder
+- Edit-menu architecture (`Assets/App/AssetCommands.swift`): `AssetDocumentActions` published per window via `.focusedSceneValue(\.assetActions)`; commands route only to the focused catalog and disable elsewhere. Copy/Select All check the text first responder so search-field editing wins; Cut/Paste always route to the text responder (the search-paste fix); Copy Name (Cmd+Opt+C), Export All/Selected (Cmd+Shift+E / Cmd+E), Find (Cmd+F) focuses search. NotificationCenter command routing removed, dead "Toggle Preview" item deleted
+- Copy, Copy Name, and Export Selected share one target priority: multi-selection → previewed asset → single selection
+
+**Risk outcomes (R1–R4):** R4 — macOS 26 drag-container API spellings (`draggable(containerItemID:)`, `dragContainer(for:)`, `dragContainerSelection(_:)`) compiled as planned. R1 (Figma file-promise drop), R2 (Table multi-row drag), R3 (`.searchable(isPresented:)` focusing the field) need manual runtime verification — not yet user-confirmed. Fallbacks if they fail: pre-written file at drag start (R1), `TableRow.itemProvider` (R2), walk the toolbar for the `NSSearchField` and make it first responder (R3).
 
 ## Open Questions
 
