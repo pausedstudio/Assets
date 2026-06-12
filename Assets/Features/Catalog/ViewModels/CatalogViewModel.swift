@@ -134,7 +134,16 @@ final class CatalogViewModel: @unchecked Sendable {
                     self.isLoading = false
                 } else {
                     self.catalogName = self.reader?.catalogName ?? url.lastPathComponent
-                    self.assets = (self.reader?.assets ?? []).map { Asset(from: $0) }
+                    let rawAssets = self.reader?.assets ?? []
+                    let readerAtCompletion = self.reader
+                    // Mapping ~6k dictionaries (each init lowercases a search
+                    // key) is a visible main-thread hitch, so build off main.
+                    let mapped = await Task.detached(priority: .userInitiated) {
+                        rawAssets.map { Asset(from: $0) }
+                    }.value
+                    // A reload may have swapped the reader while the map ran
+                    guard self.reader === readerAtCompletion else { return }
+                    self.assets = mapped
                     // isLoading stays true until this first filter result is
                     // applied, so the "No Assets" empty state never flashes
                     // between load completion and the filter landing.

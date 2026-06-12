@@ -421,25 +421,28 @@ struct CheckerboardView: View {
   var squareSize: CGFloat = 8
 
   var body: some View {
-    Canvas { context, size in
-      let lightColor = Color(white: 0.95)
-      let darkColor = Color(white: 0.85)
+    Rectangle()
+      .fill(ImagePaint(image: Image(nsImage: Self.tile(squareSize: squareSize))))
+  }
 
-      for row in 0..<Int(size.height / squareSize) + 1 {
-        for col in 0..<Int(size.width / squareSize) + 1 {
-          let isEven = (row + col) % 2 == 0
-          let rect = CGRect(
-            x: CGFloat(col) * squareSize,
-            y: CGFloat(row) * squareSize,
-            width: squareSize,
-            height: squareSize
-          )
-          context.fill(
-            Path(rect),
-            with: .color(isEven ? lightColor : darkColor)
-          )
-        }
-      }
+  // One rasterized 2x2-square tile per square size, shared by every cell —
+  // replaces a per-cell Canvas that filled ~200 individual Path rects on
+  // each materialization during scroll.
+  @MainActor private static var tileCache: [CGFloat: NSImage] = [:]
+
+  @MainActor private static func tile(squareSize: CGFloat) -> NSImage {
+    if let cached = tileCache[squareSize] { return cached }
+
+    let side = squareSize * 2
+    let tile = NSImage(size: NSSize(width: side, height: side), flipped: false) { _ in
+      NSColor(white: 0.95, alpha: 1).setFill()
+      NSRect(x: 0, y: 0, width: side, height: side).fill()
+      NSColor(white: 0.85, alpha: 1).setFill()
+      NSRect(x: 0, y: 0, width: squareSize, height: squareSize).fill()
+      NSRect(x: squareSize, y: squareSize, width: squareSize, height: squareSize).fill()
+      return true
     }
+    tileCache[squareSize] = tile
+    return tile
   }
 }
