@@ -128,11 +128,10 @@ struct AssetGridView: View {
             .contextMenu {
               assetContextMenu(for: asset)
             }
-            .draggable(asset) {
-              AssetDragPreview(asset: asset)
-            }
+            .modifier(AssetItemDrag(asset: asset))
           }
         }
+        .modifier(AssetGridDragContainer(viewModel: viewModel))
         .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width in
           viewModel.gridColumnCount = max(1, Int((width + Self.itemSpacing) / (Self.itemMinWidth + Self.itemSpacing)))
         }
@@ -320,6 +319,42 @@ struct AssetGridView: View {
       viewModel.selectedAssets = [asset.id]
       viewModel.selectionAnchorID = asset.id
       selectedAsset = asset
+    }
+  }
+}
+
+// MARK: - Drag Modifiers
+
+/// Per-item drag: on macOS 26 the item participates in the grid's drag container
+/// (multi-item drags); earlier systems fall back to single-item draggable.
+private struct AssetItemDrag: ViewModifier {
+  let asset: Asset
+
+  func body(content: Content) -> some View {
+    if #available(macOS 26.0, *) {
+      content.draggable(containerItemID: asset.id)
+    } else {
+      content.draggable(asset) {
+        AssetDragPreview(asset: asset)
+      }
+    }
+  }
+}
+
+/// Grid-level drag container: on macOS 26, dragging a selected tile carries the
+/// whole selection; earlier systems pass through unchanged.
+private struct AssetGridDragContainer: ViewModifier {
+  let viewModel: CatalogViewModel
+
+  func body(content: Content) -> some View {
+    if #available(macOS 26.0, *) {
+      content
+        .dragContainer(for: Asset.self) { ids in
+          viewModel.filteredAssets.filter { ids.contains($0.id) }
+        }
+        .dragContainerSelection(Array(viewModel.selectedAssets))
+    } else {
+      content
     }
   }
 }
