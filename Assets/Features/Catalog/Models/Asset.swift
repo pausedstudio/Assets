@@ -226,15 +226,20 @@ extension UTType {
 
 extension Asset: Transferable {
     static var transferRepresentation: some TransferRepresentation {
-        FileRepresentation(exportedContentType: .png) { asset in
-            let tempURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent(asset.filename)
-            try asset.data.write(to: tempURL)
-            return SentTransferredFile(tempURL)
+        FileRepresentation(exportedContentType: .svg) { asset in
+            SentTransferredFile(try asset.writeTemporaryFile())
         }
+        .exportingCondition { $0.isVector }
 
-        DataRepresentation(exportedContentType: .png) { asset in
-            asset.data
+        DataRepresentation(exportedContentType: .svg) { $0.data }
+            .exportingCondition { $0.isVector }
+
+        FileRepresentation(exportedContentType: .png) { asset in
+            SentTransferredFile(try asset.writeTemporaryFile())
         }
+        .exportingCondition { !$0.isVector }
+
+        DataRepresentation(exportedContentType: .png) { $0.data }
+            .exportingCondition { !$0.isVector }
     }
 }
