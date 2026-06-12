@@ -54,12 +54,15 @@ Fully functional browser for `.car` catalogs and Core Animation archives. Grid a
 
 - Arrow-key fallback when the list Table isn't first responder has no auto-scroll (SwiftUI `Table` exposes no scroll API; heals on next click — focused Table scrolls natively)
 - On macOS 15 a grid drag carries only the grabbed tile (multi-drag there is the list-mode path; the drag-container API is macOS 26+)
-- Figma drag-and-drop of vectors (file-promise drop) pending manual verification; Figma paste (SVG text) and export are the verified paths
+- Clicking Edit > Copy with the mouse while the Quick Look panel is key still no-ops (FocusedValues are nil when the panel is key); the Cmd+C shortcut works there via the key monitor
 
 ## Open Questions
 
-- Does Figma accept the `FileRepresentation` file-promise drop for vectors? (Fallback if not: pre-write the file at drag start)
 - Does `.searchable(isPresented:)` reliably move focus to the field on macOS 15? (Fallback: walk the toolbar for the `NSSearchField`)
+
+### Resolved (2026-06-12) — Figma drag-and-drop
+
+Chromium-based receivers (Figma desktop) register only `NSPasteboardTypeFileURL` for drops and never resolve macOS file promises (verified against Chromium source: `web_contents_view_cocoa.mm` registered types; `clipboard_util_mac.mm` reads only concrete file URLs). `FileRepresentation` vends promises, so drops were rejected outright. Fix: `Asset.transferRepresentation` now leads with `ProxyRepresentation(exporting:)` returning a concrete temp-file URL (lazily written at fulfillment, `AssetsExport/<uuid>/<filename>`), with SVG/PNG `DataRepresentation`s behind it. Covers grid drag, table row drag, and the macOS 26 drag container in one place; Finder copies the file at the URL exactly as before. Cmd+C while the Quick Look panel is key now copies the previewed asset via the key monitor (the SwiftUI scene loses focus when the panel takes key, so the menu's FocusedValue path is nil there).
 
 ## Notes
 

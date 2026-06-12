@@ -184,6 +184,20 @@ struct QuickLookModifier: ViewModifier {
           // Don't intercept if a text field has focus
           if host.firstResponder is NSTextView { return event }
 
+          // Cmd+C while the Quick Look panel is key: the SwiftUI scene isn't
+          // focused, so the Edit menu's FocusedValue copy resolves to nil —
+          // copy the previewed asset directly (Finder parity).
+          if panelHasKeys,
+            event.modifierFlags.intersection([.command, .option, .control, .shift]) == [.command],
+            event.charactersIgnoringModifiers?.lowercased() == "c",
+            let asset = selectedAsset
+          {
+            MainActor.assumeIsolated {
+              viewModel.copyAssetsToPasteboard([asset])
+            }
+            return nil
+          }
+
           // Let command/option/control shortcuts reach the system
           if !event.modifierFlags.intersection([.command, .option, .control]).isEmpty {
             return event
