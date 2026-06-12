@@ -34,6 +34,16 @@ struct AssetGridView: View {
         }
       }
     }
+    .onChange(of: viewModel.selectedAssets) { oldValue, newValue in
+      let added = newValue.subtracting(oldValue)
+      if newValue.isEmpty {
+        selectedAsset = nil
+      } else if added.count == 1, let addedID = added.first {
+        selectedAsset = viewModel.filteredAssets.first { $0.id == addedID }
+      } else if let current = selectedAsset, !newValue.contains(current.id) {
+        selectedAsset = viewModel.filteredAssets.first { newValue.contains($0.id) }
+      }
+    }
     .searchable(
       text: $viewModel.searchText,
       isPresented: $isSearchPresented,
@@ -139,20 +149,7 @@ struct AssetGridView: View {
 
   @ViewBuilder
   private var listContent: some View {
-    Table(
-      viewModel.filteredAssets,
-      selection: Binding(
-        get: { selectedAsset?.id },
-        set: { id in
-          if let id = id {
-            selectedAsset = viewModel.filteredAssets.first { $0.id == id }
-            if let asset = selectedAsset {
-              viewModel.selectedAssets = [asset.id]
-            }
-          }
-        }
-      )
-    ) {
+    Table(of: Asset.self, selection: $viewModel.selectedAssets) {
       TableColumn("Name") { asset in
         HStack(spacing: 8) {
           Image(nsImage: asset.thumbnail)
@@ -180,15 +177,17 @@ struct AssetGridView: View {
         }
       }
       .width(80)
+    } rows: {
+      ForEach(viewModel.filteredAssets) { asset in
+        TableRow(asset)
+          .draggable(asset)
+      }
     }
     .contextMenu(forSelectionType: Asset.ID.self) { ids in
-      if let id = ids.first, let asset = viewModel.filteredAssets.first(where: { $0.id == id }) {
-        assetContextMenu(for: asset)
-      }
+      assetContextMenu(forIDs: ids)
     } primaryAction: { ids in
-      if let id = ids.first, let asset = viewModel.filteredAssets.first(where: { $0.id == id }) {
-        selectedAsset = asset
-        viewModel.selectedAssets = [asset.id]
+      if let id = ids.first {
+        selectedAsset = viewModel.filteredAssets.first { $0.id == id }
       }
     }
   }
@@ -236,24 +235,57 @@ struct AssetGridView: View {
     }
   }
 
+  // MARK: - Context Menu
+
+  private var selectedAssetsInDisplayOrder: [Asset] {
+    viewModel.filteredAssets.filter { viewModel.selectedAssets.contains($0.id) }
+  }
+
   @ViewBuilder
   private func assetContextMenu(for asset: Asset) -> some View {
-    Button("Copy") {
-      viewModel.copyAssetsToPasteboard([asset])
+    let isInMultiSelection = viewModel.selectedAssets.count > 1 && viewModel.selectedAssets.contains(asset.id)
+    assetContextMenu(targets: isInMultiSelection ? selectedAssetsInDisplayOrder : [asset])
+  }
+
+  @ViewBuilder
+  private func assetContextMenu(forIDs ids: Set<Asset.ID>) -> some View {
+    assetContextMenu(targets: viewModel.filteredAssets.filter { ids.contains($0.id) })
+  }
+
+  @ViewBuilder
+  private func assetContextMenu(targets: [Asset]) -> some View {
+    if targets.count > 1 {
+      Button("Copy \(targets.count) Assets") {
+        viewModel.copyAssetsToPasteboard(targets)
+      }
+
+      Button("Copy Names") {
+        AssetPasteboardWriter.copyNames(of: targets)
+      }
+    } else if let asset = targets.first {
+      Button("Copy") {
+        viewModel.copyAssetsToPasteboard([asset])
+      }
+
+      Button("Copy Name") {
+        AssetPasteboardWriter.copyNames(of: [asset])
+      }
     }
 
-    Button("Quick Look") {
-      QuickLookCoordinator.shared.preview(asset: asset)
-    }
+    if let asset = targets.first {
+      Button("Quick Look") {
+        QuickLookCoordinator.shared.preview(asset: asset)
+      }
 
-    Button("Show in Preview") {
-      selectedAsset = asset
-    }
+      Button("Show in Preview") {
+        selectedAsset = asset
+      }
 
-    Divider()
+      Divider()
 
-    Button("Select") {
-      viewModel.selectedAssets.insert(asset.id)
+      Button("Select") {
+        viewModel.selectedAssets.formUnion(targets.map(\.id))
+      }
     }
   }
 
@@ -274,15 +306,19 @@ struct AssetGridView: View {
   }
 
   private func handleTap(_ asset: Asset) {
-    if NSEvent.modifierFlags.contains(.command) {
-      // Command-click: toggle selection
+    if NSEvent.modifierFlags.contains(.shift) {
+      // Shift-click: Finder-style range selection from the anchor
+      viewModel.selectRange(to: asset)
+    } else if NSEvent.modifierFlags.contains(.command) {
+      // Command-click: toggle selection; a newly selected item becomes the anchor
       viewModel.toggleSelection(asset)
-    } else if NSEvent.modifierFlags.contains(.shift) {
-      // Shift-click: add to selection
-      viewModel.selectedAssets.insert(asset.id)
+      if viewModel.selectedAssets.contains(asset.id) {
+        viewModel.selectionAnchorID = asset.id
+      }
     } else {
-      // Regular click: single selection and show in preview
+      // Regular click: single selection, anchor, and show in preview
       viewModel.selectedAssets = [asset.id]
+      viewModel.selectionAnchorID = asset.id
       selectedAsset = asset
     }
   }
