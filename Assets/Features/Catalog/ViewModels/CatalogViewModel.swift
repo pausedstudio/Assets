@@ -17,9 +17,20 @@ final class CatalogViewModel: @unchecked Sendable {
     // MARK: - State
 
     var assets: [Asset] = [] {
-        didSet { rebuildSidebarSummaries() }
+        didSet {
+            // The sorted-base cache is keyed by (sort option, epoch), so any
+            // change to the base list must bump the epoch — otherwise a filter
+            // scheduled while `assets` was empty mid-load poisons the cache
+            // for the fully loaded list.
+            filterCaches.reset()
+            rebuildSidebarSummaries()
+        }
     }
     var filteredAssets: [Asset] = []
+    /// The query that produced the current `filteredAssets`; lags `searchText`
+    /// by the debounce + compute window so the empty state never pairs a fresh
+    /// query with a stale result set.
+    private(set) var appliedSearchText: String = ""
     var selectedCategory: AssetCategory = .all
     var selectedGroup: AssetGroup? = nil
     var selectedAssets: Set<Asset.ID> = []
@@ -106,6 +117,7 @@ final class CatalogViewModel: @unchecked Sendable {
 
     // MARK: - Loading
 
+    @MainActor
     func loadCatalog(from url: URL) {
         AssetTempFiles.cleanUpStale()
         fileURL = url
@@ -119,30 +131,34 @@ final class CatalogViewModel: @unchecked Sendable {
         // Drop any in-flight filter so a stale result can't land in the new catalog
         filterTask?.cancel()
         filterGeneration += 1
-        filterCaches.reset()
         awaitingFirstFilterResult = false
 
-        reader = AssetCatalogReader(fileURL: url)
-        reader?.thumbnailSize = NSSize(width: 128, height: 128)
+        // Cancel the previous read; its callbacks still fire but bail on the
+        // identity guards below instead of touching the new reader's state.
+        reader?.cancelReading()
 
-        reader?.read(completionHandler: { [weak self] in
+        let newReader = AssetCatalogReader(fileURL: url)
+        newReader.thumbnailSize = NSSize(width: 128, height: 128)
+        reader = newReader
+
+        newReader.read(completionHandler: { [weak self] in
             Task { @MainActor in
-                guard let self = self else { return }
+                // A reload may have swapped the reader while this one was reading
+                guard let self = self, self.reader === newReader else { return }
 
-                if let readerError = self.reader?.error {
+                if let readerError = newReader.error {
                     self.error = readerError.localizedDescription
                     self.isLoading = false
                 } else {
-                    self.catalogName = self.reader?.catalogName ?? url.lastPathComponent
-                    let rawAssets = self.reader?.assets ?? []
-                    let readerAtCompletion = self.reader
+                    self.catalogName = newReader.catalogName ?? url.lastPathComponent
+                    let rawAssets = newReader.assets
                     // Mapping ~6k dictionaries (each init lowercases a search
                     // key) is a visible main-thread hitch, so build off main.
                     let mapped = await Task.detached(priority: .userInitiated) {
                         rawAssets.map { Asset(from: $0) }
                     }.value
                     // A reload may have swapped the reader while the map ran
-                    guard self.reader === readerAtCompletion else { return }
+                    guard self.reader === newReader else { return }
                     self.assets = mapped
                     // isLoading stays true until this first filter result is
                     // applied, so the "No Assets" empty state never flashes
@@ -155,11 +171,13 @@ final class CatalogViewModel: @unchecked Sendable {
             }
         }, progressHandler: { [weak self] progress in
             Task { @MainActor in
-                self?.loadingProgress = progress
+                guard let self = self, self.reader === newReader else { return }
+                self.loadingProgress = progress
             }
         })
     }
 
+    @MainActor
     func cancelLoading() {
         reader?.cancelReading()
         isLoading = false
@@ -218,6 +236,7 @@ final class CatalogViewModel: @unchecked Sendable {
             await MainActor.run {
                 guard generation == self.filterGeneration else { return }
                 self.filteredAssets = result
+                self.appliedSearchText = request.searchText
                 if self.awaitingFirstFilterResult {
                     self.awaitingFirstFilterResult = false
                     self.isLoading = false
@@ -328,7 +347,7 @@ final class CatalogViewModel: @unchecked Sendable {
             editor.close()
 
             // Reload the catalog to reflect changes
-            loadCatalog(from: url)
+            await loadCatalog(from: url)
         } catch {
             editor.close()
             throw error
@@ -348,7 +367,7 @@ final class CatalogViewModel: @unchecked Sendable {
             editor.close()
 
             // Reload the catalog to reflect changes
-            loadCatalog(from: url)
+            await loadCatalog(from: url)
         } catch {
             editor.close()
             throw error
@@ -368,7 +387,7 @@ final class CatalogViewModel: @unchecked Sendable {
             editor.close()
 
             // Reload the catalog to reflect changes
-            loadCatalog(from: url)
+            await loadCatalog(from: url)
         } catch {
             editor.close()
             throw error

@@ -63,6 +63,13 @@ Fully functional browser for `.car` catalogs and Core Animation archives. Grid a
 
 ## Notes
 
+### Recent Changes (2026-06-12) — Load/Filter Race Hardening
+
+- `loadCatalog` is `@MainActor` (edit methods `await` it), cancels the previous `AssetCatalogReader`, and its completion/progress closures capture their owning reader and bail on an identity mismatch — a stale completion can no longer read the new reader's mid-load state (NSMutableArray copy-during-mutation) or mark a partial load complete, and `filterTask`/`filterGeneration` are only ever touched on main.
+- Filter caches reset in `assets.didSet`, not just at load start: the sorted-base cache is keyed by (sort option, epoch), so a filter scheduled while `assets` was empty mid-load could otherwise poison the cache for the loaded catalog (permanent "No Assets" on a full catalog).
+- `Asset.dominantColorHSB` samples a bitmap decoded from the immutable `data` bytes (PNG directly; SVG rasterized via a locally created NSImage) instead of `thumbnail.tiffRepresentation` — background color sampling no longer exercises an NSImage instance shared with main-thread rendering.
+- Grid empty state branches on `appliedSearchText` (the query that produced the current `filteredAssets`) instead of the live `searchText`, so clearing a zero-result search no longer flashes "No Assets" during the debounce window.
+
 ### Recent Changes (2026-06-12) — Search/Filter Performance
 
 - **Async filter pipeline** (`CatalogViewModel.scheduleFilter`): `searchText` no longer filters synchronously in `didSet` — typing/pasting renders instantly. Search changes debounce 120 ms; sort/category/group/color changes run immediately. Each call snapshots all inputs into `AssetFilterEngine.Request` on the main thread, cancels the prior task, bumps a generation counter (latest-wins), and computes on a background `Task(priority: .userInitiated)`; results apply on `MainActor` only if the generation still matches. `isLoading` stays true until the first filter result lands so the empty state never flashes.

@@ -223,14 +223,18 @@ struct AssetGridView: View {
 
   @ViewBuilder
   private var emptyView: some View {
-    if viewModel.searchText.isEmpty {
+    // Branch on the query that produced `filteredAssets`, not the live
+    // searchText — the live text updates instantly while results lag by the
+    // debounce window, which would flash "No Assets" when clearing a
+    // zero-result search in a populated catalog.
+    if viewModel.appliedSearchText.isEmpty {
       ContentUnavailableView(
         "No Assets",
         systemImage: "photo.on.rectangle.angled",
         description: Text("This catalog doesn't contain any viewable assets.")
       )
     } else {
-      ContentUnavailableView.search(text: viewModel.searchText)
+      ContentUnavailableView.search(text: viewModel.appliedSearchText)
     }
   }
 

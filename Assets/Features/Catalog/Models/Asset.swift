@@ -156,12 +156,14 @@ struct AssetGroup: Identifiable, Hashable {
 // MARK: - Color Analysis
 
 extension Asset {
-    /// Dominant color in HSB, averaged from thumbnail pixel samples.
-    /// Expensive on every call (TIFF encode + per-pixel sampling) — callers
+    /// Dominant color in HSB, averaged from pixel samples decoded out of the
+    /// immutable `data` bytes — never from `thumbnail`/`image`: this runs on
+    /// background filter threads while the main thread draws those same
+    /// NSImage instances, and a single NSImage is not safe for concurrent use.
+    /// Expensive on every call (decode + per-pixel sampling) — callers
     /// should go through `AssetFilterCaches.dominantColorHSB(for:epoch:)`.
     var dominantColorHSB: (hue: Double, saturation: Double, brightness: Double)? {
-        guard let tiffData = thumbnail.tiffRepresentation,
-              let bitmap = NSBitmapImageRep(data: tiffData) else {
+        guard let bitmap = Self.sampleBitmap(from: data) else {
             return nil
         }
 
@@ -197,6 +199,20 @@ extension Asset {
             saturation: totalSat / sampleCount,
             brightness: totalBri / sampleCount
         )
+    }
+
+    /// Bitmap decoded from raw asset bytes: PNG decodes directly; SVG
+    /// rasterizes through a locally created NSImage so no instance shared
+    /// with the main thread is ever touched.
+    private static func sampleBitmap(from data: Data) -> NSBitmapImageRep? {
+        if let bitmap = NSBitmapImageRep(data: data) {
+            return bitmap
+        }
+        guard let image = NSImage(data: data),
+              let tiffData = image.tiffRepresentation else {
+            return nil
+        }
+        return NSBitmapImageRep(data: tiffData)
     }
 }
 
