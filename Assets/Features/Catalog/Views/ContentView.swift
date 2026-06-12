@@ -13,6 +13,7 @@ struct ContentView: View {
 
   @State private var columnVisibility: NavigationSplitViewVisibility = .all
   @State private var selectedAsset: Asset?
+  @State private var isSearchPresented = false
   @State private var showingExportPanel = false
   @State private var exportMode: ExportMode = .all
 
@@ -27,7 +28,8 @@ struct ContentView: View {
     } detail: {
       AssetGridView(
         viewModel: document.viewModel,
-        selectedAsset: $selectedAsset
+        selectedAsset: $selectedAsset,
+        isSearchPresented: $isSearchPresented
       )
     }
     .navigationTitle(

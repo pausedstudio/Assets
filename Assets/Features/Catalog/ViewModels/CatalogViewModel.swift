@@ -18,6 +18,9 @@ final class CatalogViewModel: @unchecked Sendable {
     var selectedCategory: AssetCategory = .all
     var selectedGroup: AssetGroup? = nil
     var selectedAssets: Set<Asset.ID> = []
+    var selectionAnchorID: Asset.ID?
+    var viewMode: ViewMode = .grid
+    var gridColumnCount: Int = 4
     var searchText: String = "" {
         didSet { filterAssets() }
     }
@@ -37,6 +40,19 @@ final class CatalogViewModel: @unchecked Sendable {
     var loadingProgress: Double = 0
     var error: String?
     var catalogName: String = ""
+
+    // MARK: - View Mode
+
+    enum ViewMode: String, CaseIterable {
+        case grid, list
+
+        var iconName: String {
+            switch self {
+            case .grid: return "square.grid.2x2"
+            case .list: return "list.bullet"
+            }
+        }
+    }
 
     // MARK: - Sort Options
 
@@ -409,6 +425,29 @@ final class CatalogViewModel: @unchecked Sendable {
         } else {
             selectedAssets.insert(asset.id)
         }
+    }
+
+    /// Finder-style range selection: selects the contiguous run of `filteredAssets`
+    /// from the anchor to the target. Repeated calls re-extend from the same anchor.
+    func selectRange(to asset: Asset) {
+        guard let targetIndex = filteredAssets.firstIndex(where: { $0.id == asset.id }) else { return }
+
+        let anchorID = selectionAnchorID.flatMap { id in
+            filteredAssets.contains { $0.id == id } ? id : nil
+        } ?? selectedAssets.first { id in
+            filteredAssets.contains { $0.id == id }
+        }
+
+        guard let anchorID,
+              let anchorIndex = filteredAssets.firstIndex(where: { $0.id == anchorID }) else {
+            selectedAssets = [asset.id]
+            selectionAnchorID = asset.id
+            return
+        }
+
+        selectionAnchorID = anchorID
+        let range = min(anchorIndex, targetIndex)...max(anchorIndex, targetIndex)
+        selectedAssets = Set(filteredAssets[range].map(\.id))
     }
 
     // MARK: - Export

@@ -9,21 +9,9 @@ import Quartz
 import SwiftUI
 
 struct AssetGridView: View {
-  let viewModel: CatalogViewModel
+  @Bindable var viewModel: CatalogViewModel
   @Binding var selectedAsset: Asset?
-  @State private var viewMode: ViewMode = .grid
-  @State private var isSearchPresented = false
-
-  enum ViewMode: String, CaseIterable {
-    case grid, list
-
-    var iconName: String {
-      switch self {
-      case .grid: return "square.grid.2x2"
-      case .list: return "list.bullet"
-      }
-    }
-  }
+  @Binding var isSearchPresented: Bool
 
   private let gridColumns = [GridItem(.adaptive(minimum: 120, maximum: 180), spacing: 12)]
 
@@ -36,7 +24,7 @@ struct AssetGridView: View {
       } else if viewModel.filteredAssets.isEmpty {
         emptyView
       } else {
-        if viewMode == .grid {
+        if viewModel.viewMode == .grid {
           gridContent
         } else {
           listContent
@@ -44,10 +32,7 @@ struct AssetGridView: View {
       }
     }
     .searchable(
-      text: Binding(
-        get: { viewModel.searchText },
-        set: { viewModel.searchText = $0 }
-      ),
+      text: $viewModel.searchText,
       isPresented: $isSearchPresented,
       placement: .toolbar,
       prompt: "Search"
@@ -56,8 +41,8 @@ struct AssetGridView: View {
     .toolbar {
       // View mode + Sort
       ToolbarItemGroup(placement: .secondaryAction) {
-        Picker("View Mode", selection: $viewMode) {
-          ForEach(ViewMode.allCases, id: \.self) { mode in
+        Picker("View Mode", selection: $viewModel.viewMode) {
+          ForEach(CatalogViewModel.ViewMode.allCases, id: \.self) { mode in
             Image(systemName: mode.iconName)
               .tag(mode)
           }
