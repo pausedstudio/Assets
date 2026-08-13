@@ -23,7 +23,8 @@ Drag in an app and its catalog appears as a browsable grid: every image at every
 - **Open anything with a catalog inside.** Point Assets at a `.car` file, or drag in an app or bundle and it finds the catalog for you.
 - **Start where you left off.** Assets opens to the catalogs you've opened before, or browse the apps in your Applications folder to find one.
 - **Grid and list views.** Browse visually, or sort by name, scale, size, and type.
-- **Filter by kind.** The sidebar splits the catalog into images, symbols, colors, and the rest — and the arrow keys move through it.
+- **Filter by kind.** The sidebar splits the catalog into images, symbols, colors, and the rest.
+- **Browse with the arrow keys.** Move through the sidebar and the grid, and cross between them with Left Arrow and Right Arrow, without reaching for the mouse.
 - **Quick Look.** Select an asset and press the Space bar. Arrow keys flip through the catalog without closing the preview.
 - **Open in Preview.** Double-click any asset to open it in Preview. Vectors arrive as PDF, so they stay sharp at any size.
 - **See the details.** The inspector shows dimensions, scale, format, file size, and the color value behind every color asset.
